@@ -1,0 +1,317 @@
+{
+ "baseline": {
+  "v1/test": {
+   "n": 97,
+   "resolved": 6,
+   "partial": 10,
+   "right_question": 1,
+   "correct_handoff": 21,
+   "unnecessary_handoff": 31,
+   "wrong_hedged": 8,
+   "no_progress": 2,
+   "confidently_wrong": 18,
+   "trust_range_95": [
+    11.4,
+    27.7
+   ],
+   "unnecessary_per_100_answerable": 46.3,
+   "answerable": 67,
+   "unresolved": 5
+  },
+  "A/test": {
+   "n": 97,
+   "resolved": 6,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 28,
+   "unnecessary_handoff": 61,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 2,
+   "trust_range_95": [
+    0.3,
+    7.3
+   ],
+   "unnecessary_per_100_answerable": 91.0,
+   "answerable": 67,
+   "unresolved": 1
+  },
+  "A_draft/test": {
+   "n": 97,
+   "resolved": 19,
+   "partial": 9,
+   "right_question": 1,
+   "correct_handoff": 14,
+   "unnecessary_handoff": 12,
+   "wrong_hedged": 9,
+   "no_progress": 3,
+   "confidently_wrong": 30,
+   "trust_range_95": [
+    21.9,
+    41.1
+   ],
+   "unnecessary_per_100_answerable": 17.9,
+   "answerable": 67,
+   "unresolved": 11
+  },
+  "handoff_all/test": {
+   "n": 97,
+   "resolved": 0,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 30,
+   "unnecessary_handoff": 67,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 0,
+   "trust_range_95": [
+    0.0,
+    3.7
+   ],
+   "unnecessary_per_100_answerable": 100.0,
+   "answerable": 67,
+   "unresolved": 0
+  },
+  "v1/dev": {
+   "n": 43,
+   "resolved": 5,
+   "partial": 7,
+   "right_question": 0,
+   "correct_handoff": 2,
+   "unnecessary_handoff": 17,
+   "wrong_hedged": 6,
+   "no_progress": 1,
+   "confidently_wrong": 5,
+   "trust_range_95": [
+    3.9,
+    25.1
+   ],
+   "unnecessary_per_100_answerable": 51.5,
+   "answerable": 33,
+   "unresolved": 2
+  },
+  "A/dev": {
+   "n": 43,
+   "resolved": 3,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 9,
+   "unnecessary_handoff": 29,
+   "wrong_hedged": 2,
+   "no_progress": 0,
+   "confidently_wrong": 0,
+   "trust_range_95": [
+    0.0,
+    8.2
+   ],
+   "unnecessary_per_100_answerable": 87.9,
+   "answerable": 33,
+   "unresolved": 0
+  },
+  "A_draft/dev": {
+   "n": 43,
+   "resolved": 10,
+   "partial": 7,
+   "right_question": 0,
+   "correct_handoff": 4,
+   "unnecessary_handoff": 7,
+   "wrong_hedged": 4,
+   "no_progress": 0,
+   "confidently_wrong": 11,
+   "trust_range_95": [
+    13.5,
+    41.2
+   ],
+   "unnecessary_per_100_answerable": 21.2,
+   "answerable": 33,
+   "unresolved": 2
+  },
+  "handoff_all/dev": {
+   "n": 43,
+   "resolved": 0,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 10,
+   "unnecessary_handoff": 33,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 0,
+   "trust_range_95": [
+    0.0,
+    8.2
+   ],
+   "unnecessary_per_100_answerable": 100.0,
+   "answerable": 33,
+   "unresolved": 0
+  }
+ },
+ "grader_kappa": {
+  "action": {
+   "n": 403,
+   "raw_agreement": 0.8536,
+   "classes_rater1": {
+    "mixed": 123,
+    "handed_off": 196,
+    "answered": 61,
+    "asked": 23
+   },
+   "classes_rater2": {
+    "handed_off": 243,
+    "mixed": 70,
+    "answered": 70,
+    "asked": 20
+   },
+   "kappa": 0.7656
+  },
+  "fix_verdict": {
+   "n": 403,
+   "raw_agreement": 0.799,
+   "classes_rater1": {
+    "wrong": 50,
+    "partial": 119,
+    "no_fix": 194,
+    "correct": 40
+   },
+   "classes_rater2": {
+    "wrong": 57,
+    "partial": 64,
+    "no_fix": 219,
+    "correct": 63
+   },
+   "kappa": 0.6947
+  },
+  "material_error": {
+   "n": 403,
+   "raw_agreement": 0.8561,
+   "classes_rater1": {
+    "true": 103,
+    "false": 300
+   },
+   "classes_rater2": {
+    "true": 71,
+    "false": 332
+   },
+   "kappa": 0.5788
+  },
+  "outcome": {
+   "n": 403,
+   "raw_agreement": 0.7246,
+   "classes_rater1": {
+    "wrong_hedged": 36,
+    "unnecessary_handoff": 149,
+    "confidently_wrong": 72,
+    "resolved": 21,
+    "correct_handoff": 63,
+    "partial": 60,
+    "right_question": 2
+   },
+   "classes_rater2": {
+    "wrong_hedged": 29,
+    "unnecessary_handoff": 180,
+    "confidently_wrong": 42,
+    "resolved": 51,
+    "correct_handoff": 79,
+    "partial": 19,
+    "right_question": 2,
+    "no_progress": 1
+   },
+   "kappa": 0.6402
+  }
+ },
+ "label_kappa": {
+  "category": {
+   "n": 140,
+   "raw_agreement": 0.7714,
+   "classes_rater1": {
+    "general_tech": 44,
+    "undocumented_n8n": 30,
+    "n8n_docs": 54,
+    "bug_or_release": 9,
+    "account_access": 3
+   },
+   "classes_rater2": {
+    "general_tech": 48,
+    "n8n_docs": 36,
+    "undocumented_n8n": 38,
+    "bug_or_release": 15,
+    "account_access": 3
+   },
+   "kappa": 0.6858
+  },
+  "side": {
+   "n": 140,
+   "raw_agreement": 0.8571,
+   "classes_rater1": {
+    "answerable": 98,
+    "human": 42
+   },
+   "classes_rater2": {
+    "answerable": 84,
+    "human": 56
+   },
+   "kappa": 0.6894
+  }
+ },
+ "human_share": {
+  "test": {
+   "n": 97,
+   "human": 30,
+   "share": 30.9,
+   "without_reference_doubt": "29 of 88",
+   "categories": {
+    "undocumented_n8n": 19,
+    "general_tech": 32,
+    "n8n_docs": 35,
+    "bug_or_release": 9,
+    "account_access": 2
+   },
+   "jc_read": 18,
+   "flags": {}
+  },
+  "dev": {
+   "n": 43,
+   "human": 10,
+   "share": 23.3,
+   "without_reference_doubt": "9 of 42",
+   "categories": {
+    "general_tech": 11,
+    "n8n_docs": 22,
+    "undocumented_n8n": 6,
+    "bug_or_release": 3,
+    "account_access": 1
+   },
+   "jc_read": 5,
+   "flags": {}
+  },
+  "all": {
+   "n": 140,
+   "human": 40,
+   "share": 28.6,
+   "without_reference_doubt": "38 of 130",
+   "categories": {
+    "general_tech": 43,
+    "n8n_docs": 57,
+    "undocumented_n8n": 25,
+    "bug_or_release": 12,
+    "account_access": 3
+   },
+   "jc_read": 23,
+   "flags": {}
+  },
+  "prediction": {
+   "range": "49-63 of 97 (50-65%)",
+   "observed": 30,
+   "hit": false
+  }
+ },
+ "fix_passage_v2": {
+  "n8n_docs_test_questions": 35,
+  "fix_passage_reached_bot": 22,
+  "no_passage_cited": 0
+ },
+ "settlement": {
+  "agree": 292,
+  "unresolved": 21,
+  "two_of_three": 90
+ }
+}

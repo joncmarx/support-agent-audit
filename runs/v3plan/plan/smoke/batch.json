@@ -1,0 +1,8 @@
+{
+ "batch": "smoke",
+ "model": "claude-sonnet-5-5",
+ "effort": "high",
+ "n": 1,
+ "system_sha256": "4f913aea4180f361ab5257b1c8c68ddfcaa1340040ee7849b08ee5e239f389fb",
+ "items_sha256": "ffba631f27e3f9f60bf2bf1b75c1e257699f49071a9e78b2e85c8de8b4a68e89"
+}

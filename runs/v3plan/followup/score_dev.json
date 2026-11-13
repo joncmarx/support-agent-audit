@@ -1,0 +1,324 @@
+{
+ "split": "dev",
+ "answerable": 33,
+ "configs": {
+  "D": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 17,
+   "partial": 2,
+   "right_question": 1,
+   "correct_handoff": 7,
+   "unnecessary_handoff": 9,
+   "wrong_hedged": 2,
+   "no_progress": 1,
+   "confidently_wrong": 4,
+   "kinds": {
+    "draft": 43
+   },
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "unnecessary_per_100_answerable": 27.3,
+   "severity": {
+    "disputed": 2,
+    "S1_wrong_fact": 2
+   },
+   "by_category": {
+    "n8n_docs": {
+     "n": 22,
+     "resolved": 10,
+     "confidently_wrong": 2
+    },
+    "bug_or_release": {
+     "n": 3,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "undocumented_n8n": {
+     "n": 6,
+     "resolved": 1,
+     "confidently_wrong": 1
+    },
+    "general_tech": {
+     "n": 11,
+     "resolved": 6,
+     "confidently_wrong": 1
+    },
+    "account_access": {
+     "n": 1,
+     "resolved": 0,
+     "confidently_wrong": 0
+    }
+   }
+  },
+  "H": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 13,
+   "partial": 2,
+   "right_question": 1,
+   "correct_handoff": 7,
+   "unnecessary_handoff": 12,
+   "wrong_hedged": 1,
+   "no_progress": 1,
+   "confidently_wrong": 6,
+   "kinds": {
+    "passed": 38,
+    "handoff": 5
+   },
+   "trust_range_95_per_100": [
+    5.3,
+    27.9
+   ],
+   "unnecessary_per_100_answerable": 36.4,
+   "severity": {
+    "disputed": 2,
+    "S1_wrong_fact": 4
+   },
+   "by_category": {
+    "n8n_docs": {
+     "n": 22,
+     "resolved": 7,
+     "confidently_wrong": 3
+    },
+    "bug_or_release": {
+     "n": 3,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "undocumented_n8n": {
+     "n": 6,
+     "resolved": 1,
+     "confidently_wrong": 1
+    },
+    "general_tech": {
+     "n": 11,
+     "resolved": 5,
+     "confidently_wrong": 2
+    },
+    "account_access": {
+     "n": 1,
+     "resolved": 0,
+     "confidently_wrong": 0
+    }
+   }
+  },
+  "I": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 15,
+   "partial": 2,
+   "right_question": 1,
+   "correct_handoff": 7,
+   "unnecessary_handoff": 12,
+   "wrong_hedged": 1,
+   "no_progress": 1,
+   "confidently_wrong": 4,
+   "kinds": {
+    "passed": 40,
+    "handoff": 3
+   },
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "unnecessary_per_100_answerable": 36.4,
+   "severity": {
+    "disputed": 2,
+    "S1_wrong_fact": 2
+   },
+   "by_category": {
+    "n8n_docs": {
+     "n": 22,
+     "resolved": 8,
+     "confidently_wrong": 2
+    },
+    "bug_or_release": {
+     "n": 3,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "undocumented_n8n": {
+     "n": 6,
+     "resolved": 1,
+     "confidently_wrong": 1
+    },
+    "general_tech": {
+     "n": 11,
+     "resolved": 6,
+     "confidently_wrong": 1
+    },
+    "account_access": {
+     "n": 1,
+     "resolved": 0,
+     "confidently_wrong": 0
+    }
+   }
+  },
+  "R": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 8,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 8,
+   "unnecessary_handoff": 23,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "kinds": {
+    "draft": 8,
+    "handoff": 35
+   },
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "unnecessary_per_100_answerable": 69.7,
+   "severity": {
+    "S1_wrong_fact": 2,
+    "disputed": 2
+   },
+   "by_category": {
+    "n8n_docs": {
+     "n": 22,
+     "resolved": 7,
+     "confidently_wrong": 3
+    },
+    "bug_or_release": {
+     "n": 3,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "undocumented_n8n": {
+     "n": 6,
+     "resolved": 1,
+     "confidently_wrong": 1
+    },
+    "general_tech": {
+     "n": 11,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "account_access": {
+     "n": 1,
+     "resolved": 0,
+     "confidently_wrong": 0
+    }
+   }
+  },
+  "RH": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 7,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 8,
+   "unnecessary_handoff": 24,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "kinds": {
+    "passed": 7,
+    "handoff": 36
+   },
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "unnecessary_per_100_answerable": 72.7,
+   "severity": {
+    "S1_wrong_fact": 2,
+    "disputed": 2
+   },
+   "by_category": {
+    "n8n_docs": {
+     "n": 22,
+     "resolved": 6,
+     "confidently_wrong": 3
+    },
+    "bug_or_release": {
+     "n": 3,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "undocumented_n8n": {
+     "n": 6,
+     "resolved": 1,
+     "confidently_wrong": 1
+    },
+    "general_tech": {
+     "n": 11,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "account_access": {
+     "n": 1,
+     "resolved": 0,
+     "confidently_wrong": 0
+    }
+   }
+  },
+  "RI": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 7,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 8,
+   "unnecessary_handoff": 24,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "kinds": {
+    "passed": 7,
+    "handoff": 36
+   },
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "unnecessary_per_100_answerable": 72.7,
+   "severity": {
+    "S1_wrong_fact": 2,
+    "disputed": 2
+   },
+   "by_category": {
+    "n8n_docs": {
+     "n": 22,
+     "resolved": 6,
+     "confidently_wrong": 3
+    },
+    "bug_or_release": {
+     "n": 3,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "undocumented_n8n": {
+     "n": 6,
+     "resolved": 1,
+     "confidently_wrong": 1
+    },
+    "general_tech": {
+     "n": 11,
+     "resolved": 0,
+     "confidently_wrong": 0
+    },
+    "account_access": {
+     "n": 1,
+     "resolved": 0,
+     "confidently_wrong": 0
+    }
+   }
+  }
+ },
+ "router_vs_answer_key": {
+  "answerable->bot": 7,
+  "answerable->person": 26,
+  "human->bot": 1,
+  "human->person": 9
+ },
+ "spend_usd": 2.3029
+}

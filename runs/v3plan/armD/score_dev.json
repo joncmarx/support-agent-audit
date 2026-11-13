@@ -1,0 +1,54 @@
+{
+ "split": "dev",
+ "answerable": 33,
+ "arms": {
+  "v4_drafts": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 10,
+   "partial": 7,
+   "right_question": 0,
+   "correct_handoff": 4,
+   "unnecessary_handoff": 7,
+   "wrong_hedged": 4,
+   "no_progress": 0,
+   "confidently_wrong": 11,
+   "unresolved": 2,
+   "kinds": {
+    "draft": 43
+   },
+   "trust_range_95_per_100": [
+    13.5,
+    41.2
+   ],
+   "unnecessary_per_100_answerable": 21.2
+  },
+  "D_drafts": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 17,
+   "partial": 2,
+   "right_question": 1,
+   "correct_handoff": 7,
+   "unnecessary_handoff": 9,
+   "wrong_hedged": 2,
+   "no_progress": 1,
+   "confidently_wrong": 4,
+   "unresolved": 3,
+   "kinds": {
+    "draft": 43
+   },
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "unnecessary_per_100_answerable": 27.3,
+   "spend_usd": 1.3218
+  }
+ },
+ "settlement": {
+  "agree": 34,
+  "unresolved": 3,
+  "two_of_three": 6
+ }
+}

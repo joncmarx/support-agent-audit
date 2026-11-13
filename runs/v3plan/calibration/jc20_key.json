@@ -1,0 +1,372 @@
+[
+ {
+  "rid": "v2:dev:291082:final",
+  "qid": 291082,
+  "version": "v2",
+  "reply": "This is most likely a **published-workflow vs. editor mismatch**: the production webhook runs the **published** version of the workflow, not whatever is currently visible in the editor [3].\n\n1. In the workflow editor, make sure your changes are actually **published** after editing. Production webhooks only use the published workflow [3].\n2. Compare the **Executions** tab result against the workflow version that is published, not the draft in the canvas. The editor can show newer node settings, but production executions won\u2019t reflect them until publish [3].\n3. If you want to verify the difference while testing, use **Listen for Test Event** on the Webhook node instead of the production URL. The test URL shows the data in the editor, while the production URL does not [3].\n4. If you\u2019re using any **pinned data** on nodes while manually testing in the editor, remember that manual executions can substitute pinned data, but production executions ignore pinned data [2]. That can make editor tests look different from the webhook run.\n\nSince you\u2019re on **n8n Cloud 2.15.1**, this is not a queue-mode / Redis issue; the key distinction here is **published production workflow vs. editor draft** [1][3].\n\nIf you publish and the webhook still runs stale logic, tell me whether the workflow is definitely published and whether the webhook path/URL changed\u2014those are the two things most likely to explain a version mismatch.",
+  "passages": [
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#4",
+   "build/understand-workflows/understand-executions/types-of-executions.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.webhook/README.md#5",
+   "deploy/host-n8n/install-options/one-line-setup.md#2",
+   "changelog/v20-breaking-changes.md#9",
+   "integrations/builtin/core-nodes/n8n-nodes-base.n8ntrigger.md#0",
+   "deploy/host-n8n/install-options/install-using-docker-compose.md#4",
+   "changelog/v20-breaking-changes.md#0"
+  ],
+  "r1_outcome": "resolved",
+  "r1_handoff": false,
+  "stratum": "A"
+ },
+ {
+  "rid": "v3:dev:253894:final",
+  "qid": 253894,
+  "version": "v3",
+  "reply": "You\u2019re trying to bundle n8n access with a paid service, and the key question is whether users get direct access to n8n itself.\n\nI need one missing fact because it changes the license answer:\n**Will your subscribers be able to log into the n8n UI and create/edit workflows, or will they only trigger prebuilt workflows without seeing the n8n builder?**\n\nWhy this matters:\n- If they **can create/edit workflows in n8n**, that looks like the prohibited \u201cembedded workflow builder\u201d/workflow-logic use case [6][8].\n- If they **cannot access the n8n interface or modify workflows** and only receive outputs or trigger prebuilt automations, that is generally allowed under the community license examples [1][4].\n\nIf the allowed case is what you mean, the safe pattern is:\n1. Keep n8n as **your** self-hosted internal tool [1][4].\n2. Do **not** give customers direct n8n UI access, workflow-builder access, or permission to edit workflows [4][6][8].\n3. Let customers use your AI API, and have n8n run behind the scenes on your own instance [1][6].\n4. If customers need to trigger workflows, expose **your own API or webhooks**, not the n8n editor [8].\n\nReply with whether users get n8n UI access, and I\u2019ll tell you which side of the license boundary this falls on.",
+  "passages": [
+   "n8n-community-license/license-faq.md#0",
+   "n8n-community-license/README.md#1",
+   "n8n-community-license/license-faq.md#5",
+   "n8n-community-license/license-faq.md#6",
+   "n8n-community-license/README.md#0",
+   "n8n-community-license/license-faq.md#2",
+   "n8n-community-license/license-faq.md#3",
+   "n8n-community-license/license-faq.md#4"
+  ],
+  "r1_outcome": "right_question",
+  "r1_handoff": false,
+  "stratum": "Q"
+ },
+ {
+  "rid": "v2:dev:306976:final",
+  "qid": 306976,
+  "version": "v2",
+  "reply": "The safest pattern is to split the workflow so completed work is persisted before the risky API call, then use an **error workflow** for failures rather than replaying the whole run.\n\n1. In your main workflow, enable **Save execution progress** in **Workflow Settings** if you want n8n to resume from the point of failure on retry [5].\n2. Create a separate workflow with an **Error Trigger** as the first node, then set it as the workflow\u2019s **Error workflow** in **Workflow Settings** [6].\n3. In that error workflow, store the failure context plus any identifiers from the last successful step so you can resume from the saved state instead of rerunning earlier nodes [6].\n4. To keep retries from repeating successful steps, design the main workflow so each step writes its result somewhere durable before the next risky step. General recovery design: use idempotent external writes and a checkpoint record keyed by the execution or business ID.\n5. For large/manual debugging runs, if partial executions complain that the existing execution data is too large, use the **Limit** node to reduce node output while testing [3].\n6. If the failure is due to memory rather than the API, n8n can show errors like **Execution stopped at this node (n8n may have run out of memory while executing it)** or **Allocation failed - JavaScript heap out of memory** [1]. In that case, split the workflow or reduce the data being processed.\n\nRule of thumb: automatic retries are good for transient API/network failures; after a small number of attempts, hand off to manual review via the error workflow.",
+  "passages": [
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#0",
+   "changelog/README.md#4",
+   "build/understand-workflows/understand-executions/types-of-executions.md#1",
+   "changelog/v20-breaking-changes.md#0",
+   "build/manage-workflows/configure-workflow-settings.md#1",
+   "build/flow-logic/handle-errors-gracefully.md#0",
+   "deploy/host-n8n/install-options/install-using-docker-compose.md#4",
+   "build/flow-logic/handle-errors-gracefully.md#2"
+  ],
+  "r1_outcome": "partial",
+  "r1_handoff": false,
+  "stratum": "W"
+ },
+ {
+  "rid": "v2:dev:258400:final",
+  "qid": 258400,
+  "version": "v2",
+  "reply": "The issue is that the AI Agent/OpenAI Chat Model path doesn\u2019t take a binary mp3 file directly as the prompt; the OpenAI Audio node is the documented way to send binary audio, and it only supports transcription/translation operations [1][4][6].\n\n1. If your goal is just transcription, keep using **OpenAI \u2192 Audio \u2192 Transcribe a Recording**.\n   - Set **Resource** to **Audio**\n   - Set **Operation** to **Transcribe a Recording**\n   - Leave **Input Data Field Name** as `data` if your Google Drive download outputs the file in the default binary property `data` [1]\n\n2. If you need **diarization**, don\u2019t try to put `data` in **AI Agent1 \u2192 Prompt**.\n   - In n8n, the **Conversational Agent** prompt is text input, not binary file input [5]\n   - The AI Agent node is for text/tool orchestration, not for passing raw audio bytes as the user message [5][7]\n\n3. Use a workflow that hands the downloaded mp3 to the **OpenAI Audio** node instead of the agent.\n   - Your **Download file** node should keep the mp3 in binary, then connect it to **OpenAI \u2192 Audio \u2192 Transcribe a Recording**\n   - If the binary property name is not `data`, change **Input Data Field Name** to the actual binary field name [1]\n\n4. If you specifically need the `gpt-4o-transcribe-diarize` model, I can\u2019t confirm from the excerpts that n8n\u2019s current OpenAI node exposes that model for the audio transcription operation. The docs I have only show the audio transcription operation using OpenAI\u2019s Whisper-based flow by default [1][4][6]. Based on that, this looks like a limitation of the current node UI, not something you can solve by typing `data` into the agent prompt.\n\nIf you want, I can help you rewrite your workflow so the mp3 is transcribed correctly from Google Drive in one pass.",
+  "passages": [
+   "integrations/builtin/app-nodes/n8n-nodes-langchain.openai/audio-operations.md#1",
+   "integrations/builtin/app-nodes/n8n-nodes-langchain.openai/text-operations.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-langchain.openai/audio-operations.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-langchain.openai/audio-operations.md#2",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/conversational-agent.md#1",
+   "integrations/builtin/app-nodes/n8n-nodes-langchain.openai/README.md#0",
+   "build/integrate-ai/understand-ai-components/what-chains-do.md#0",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/openai-functions-agent.md#0"
+  ],
+  "r1_outcome": "partial",
+  "r1_handoff": false,
+  "stratum": "W"
+ },
+ {
+  "rid": "v3:dev:297787:final",
+  "qid": 297787,
+  "version": "v3",
+  "reply": "You\u2019re safe on the n8n side: with **Email Format: Both**, n8n sends both a plain-text part and an HTML part, and the recipient\u2019s email client chooses which one to show [1].\n\n1. In **Send Email** \u2192 **Email Format**, choose **Both** [1].\n2. Keep the QR code attached as a real attachment in **Options \u2192 Attachments** so it\u2019s still available even if the client doesn\u2019t render HTML [1].\n3. For the inline logo/QR in the HTML body, assume the **HTML** part is what makes them visible; the plain-text part won\u2019t show those images. That\u2019s standard email behavior, not an n8n-specific setting.\n4. Best practice for customers: put the QR code in **both** places:\n   - inline in the HTML email for convenience\n   - as an attachment for reliability\n   - optionally include a direct download link or fallback text in the plain-text version\n\nOn your second question: modern providers like Gmail, iCloud, Yandex, and Mail.ru usually render HTML, but n8n can\u2019t guarantee that every client will choose HTML. The real risk is not the provider, but the recipient\u2019s mail app or security settings.\n\nIf this is a ticketing email, the safest pattern is: **HTML with inline QR + attached QR + plain-text fallback that includes a link or instructions**.",
+  "passages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.sendemail.md#1",
+   "changelog/release-notes-1.x.md#32",
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#1",
+   "build/build-and-manage-agents.md#1",
+   "integrations/builtin/core-nodes/n8n-nodes-base.sendemail.md#2",
+   "administer/manage-credentials/end-user-credentials.md#1",
+   "connect/create-nodes/build-your-node/reference/http-request-helpers.md#1",
+   "integrations/builtin/credentials/send-email/README.md#0"
+  ],
+  "r1_outcome": "resolved",
+  "r1_handoff": false,
+  "stratum": "A"
+ },
+ {
+  "rid": "v1:dev:310250:final",
+  "qid": 310250,
+  "version": "v1",
+  "reply": "Thanks for sharing this helpful community guide idea. The docs do confirm that:\n\n- The n8n community forum provides free support for all n8n users, and it\u2019s the best place for answers of all kinds, including help from both n8n support staff and community members [1].\n- For technical support, users on non-Enterprise Cloud plans should use the forum; email support is for admin and billing issues on those plans [1].\n- Enterprise customers can use email support for technical, account, billing, and other inquiries [1].\n- When asking for help, it\u2019s best to include your instance details and debug information from **Help \u2192 About n8n \u2192 Copy debug information** [1].\n\nThe docs also mention forum participation and sharing workflows in code blocks with triple backticks [6].\n\nHowever, the docs provided do **not** cover forum categories/tabs, the earning program, specific moderators, or a full \u201cguide to the forum\u201d writeup. If you want to make sure your post is accurate, please consider asking in the n8n community forum or contacting n8n support if needed [1].",
+  "passages": [
+   "contribute/where-to-get-help.md#0",
+   "contribute/contribution-guide-for-n8n-docs/README.md#0",
+   "deploy/host-n8n/deploy-as-an-oem-integration/README.md#1",
+   "contribute/contribution-guide-for-n8n-docs/README.md#5",
+   "n8n-community-license/README.md#1",
+   "contribute/README.md#0"
+  ],
+  "r1_outcome": "partial",
+  "r1_handoff": true,
+  "stratum": "Q"
+ },
+ {
+  "rid": "v1:dev:295767:final",
+  "qid": 295767,
+  "version": "v1",
+  "reply": "Thanks for the details. Based on the docs, I can confirm that MySQL nodes should use **MySQL credentials** [3], and credentials are created/tested through n8n\u2019s credential system [4].\n\nHowever, the specific error **`Credential with ID \"... \" does not exist for type \"mySql\"`** isn\u2019t covered in the documentation excerpts I have. The troubleshooting docs only mention a different credential-type mismatch error (`\"Credentials of type '*' aren't known\"`) [5], but not this ID-not-found case.\n\nI\u2019d suggest:\n- double-checking that the credential exists in the same **project/personal space** as the workflow/node [4]\n- re-selecting or recreating the credential in the node\n- if it still fails, contact **n8n support** or ask in the **n8n community forum**, since the docs here don\u2019t cover this exact issue.",
+  "passages": [
+   "integrations/builtin/credentials/mysql.md#0",
+   "integrations/builtin/credentials/yourls.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-base.mysql/README.md#0",
+   "build/understand-workflows/create-and-edit-credentials.md#0",
+   "connect/create-nodes/test-your-node/troubleshooting.md#0",
+   "connect/connect-to-n8n-mcp-server/mcp-server-tools-reference.md#38"
+  ],
+  "r1_outcome": "partial",
+  "r1_handoff": true,
+  "stratum": "Q"
+ },
+ {
+  "rid": "v1:dev:277740:final",
+  "qid": 277740,
+  "version": "v1",
+  "reply": "The docs confirm that Salesforce credentials in n8n support both **JWT** and **OAuth2** [1], and that **External Client Apps are recommended for new integrations** because Salesforce is deprecating Connected Apps, though existing Connected Apps will continue to work [1].\n\nHowever, the provided documentation doesn\u2019t cover:\n\n- whether there\u2019s a **global credential update** mechanism in n8n,\n- how to **bulk update existing workflows/nodes**,\n- or migration best practices / prioritization guidance from other teams.\n\nSo I can\u2019t confirm a supported \u201cupdate once, apply everywhere\u201d approach from these excerpts. The safest documented path is to create the new Salesforce credential type and update the nodes that use it [1][3][5].\n\nIf you\u2019d like guidance specific to your n8n setup, please contact **n8n support** or ask in the **n8n community forum**.",
+  "passages": [
+   "integrations/builtin/credentials/salesforce.md#0",
+   "integrations/builtin/credentials/salesforce.md#3",
+   "integrations/builtin/credentials/salesforce.md#4",
+   "integrations/builtin/credentials/salesforce.md#5",
+   "integrations/builtin/credentials/salesforce.md#1",
+   "integrations/builtin/credentials/salesforce.md#2"
+  ],
+  "r1_outcome": "unnecessary_handoff",
+  "r1_handoff": true,
+  "stratum": "H"
+ },
+ {
+  "rid": "v1:dev:304791:final",
+  "qid": 304791,
+  "version": "v1",
+  "reply": "Yes \u2014 n8n has a templates library you can browse for free workflows and examples. When creating a new workflow, you can start from an existing template instead of an empty workflow [2]. Templates are meant to help you get started and show examples and best practices [2].\n\nYou can access them by selecting **Templates**, which opens the templates library. If you use n8n\u2019s library, it will take you to **Workflows on the n8n website** [2].\n\nIf you\u2019re also learning n8n, n8n Academy has interactive courses with hands-on exercises, quizzes, badges, and certificates, which can help you get started without needing external accounts for most courses [1].\n\nIf you meant free downloadable workflows from a specific source or need help finding something for your use case, the docs here don\u2019t list individual workflow packs. You could ask in the n8n community forum or contact n8n support for more suggestions.",
+  "passages": [
+   "get-started/learning-paths.md#0",
+   "build/ways-of-building-workflows/use-templates.md#0",
+   "deploy/use-n8n-cloud/download-workflows.md#0",
+   "get-started/build-your-first-workflow.md#7",
+   "deploy/host-n8n/configure-n8n/basic-configuration/configuration-examples/configure-a-custom-workflow-templates-library.md#4",
+   "deploy/use-n8n-cloud/start-your-free-trial.md#0"
+  ],
+  "r1_outcome": "partial",
+  "r1_handoff": false,
+  "stratum": "W"
+ },
+ {
+  "rid": "v3:dev:295919:final",
+  "qid": 295919,
+  "version": "v3",
+  "reply": "The core issue is that webhook retries are creating a second valid request, so you need idempotency around the event ID rather than relying on n8n to \u201cdedupe\u201d it for you.\n\n1. Make the workflow idempotent using `event_id` as the unique key in your database.  \n   - Add a table/column with a **unique constraint** on `event_id`.  \n   - On each run, try an insert-first or upsert pattern. If the row already exists, stop the workflow or skip side effects.  \n   - This is general DB/webhook reliability practice, not n8n-specific.\n\n2. If you want to reduce duplicate side effects, return the webhook response as early as possible.  \n   - The Webhook node can return data from the workflow [5].  \n   - In queue mode, the webhook request is received by the main/webhook process and the execution is handed to a worker [1][4], so there can be extra latency.  \n   - A fast response can reduce retry pressure from the sender, though it does **not** by itself prevent duplicates.\n\n3. If you\u2019re self-hosting and currently running regular mode, consider concurrency control only as a throughput safeguard.  \n   - Set `N8N_CONCURRENCY_PRODUCTION_LIMIT=<number>` to limit concurrent production executions [7].  \n   - This helps reduce overload, but it does **not** solve duplicate webhook deliveries.\n\n4. If you use queue mode, keep using Redis + a database; don\u2019t use SQLite for distributed queue mode [1][4].  \n   - Queue mode requires Redis and a database [1][4].  \n   - n8n does not support queue mode over SQLite [1].\n\n5. For side effects like email/API calls, guard them with the same idempotency check before sending.  \n   - Example: store `event_id`, mark it processed only after all downstream steps succeed, and have later retries see that record and exit.\n\nIf you want, I can sketch a concrete n8n workflow pattern for \u201ccheck event_id \u2192 insert/lock \u2192 process \u2192 mark complete\u201d using your database node.",
+  "passages": [
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#4",
+   "changelog/README.md#4",
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#6",
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.webhook/README.md#0",
+   "changelog/release-notes-1.x.md#32",
+   "deploy/host-n8n/configure-n8n/scaling/control-concurrency.md#0",
+   "deploy/host-n8n/configure-n8n/scaling/measure-performance.md#0"
+  ],
+  "r1_outcome": "resolved",
+  "r1_handoff": false,
+  "stratum": "A"
+ },
+ {
+  "rid": "v2:dev:300857:final",
+  "qid": 300857,
+  "version": "v2",
+  "reply": "This sounds most like an ownership/project-references issue after the user move: the workflows were transferred, but some dependent resources still resolve differently, so the fix depends on where the workflows and data tables now live.\n\nPlease check one thing for me: are the failing parent workflow, sub-workflow, and data table all in the **same project** after the move, and was the move done with **Workflow menu / Credential menu > Move** [4]?\n\nWhy this matters: in n8n, sub-workflow calls and data tables are tied to project context, and moving items can revoke sharing [4]. Also, reviews/publishing don\u2019t cover data tables or credentials, so a workflow can look correct while its dependencies are no longer aligned [5].\n\nIf they\u2019re not all in the same project, move them together into one project and retest. If they are already in the same project, I\u2019d want the exact error text from the screenshots before recommending a rollback.",
+  "passages": [
+   "administer/use-source-control-and-environments/push-and-pull-changes.md#5",
+   "changelog/v10-migration-guide.md#2",
+   "deploy/host-n8n/keep-n8n-running/backup-and-restore.md#1",
+   "administer/manage-users-and-access/set-permissions-and-roles-rbac/organize-work-in-projects.md#1",
+   "build/manage-workflows/workflow-reviews.md#1",
+   "deploy/host-n8n/keep-n8n-running/backup-and-restore.md#0",
+   "integrations/builtin/deprecated-nodes.md#1",
+   "deploy/host-n8n/configure-n8n/use-the-command-line.md#6"
+  ],
+  "r1_outcome": "confidently_wrong",
+  "r1_handoff": false,
+  "stratum": "Q"
+ },
+ {
+  "rid": "v3:dev:271805:final",
+  "qid": 271805,
+  "version": "v3",
+  "reply": "This looks like a UI change or regression in the node Table view, not a workflow problem, since it\u2019s missing across multiple unrelated workflows and there\u2019s no error.\n\nI can\u2019t confirm from the docs excerpts that the \u201cfocus column\u201d control was intentionally removed or renamed, so this needs a human to verify against the 2.9.3 Cloud UI behavior.\n\nWhat you can safely check meanwhile:\n1. In a node\u2019s **INPUT** or **OUTPUT** panel, try **Search** to visually filter rows/objects [4].\n2. Use the **JSON** view or **Schema** view in the node details panel to inspect the data structure [6].\n3. If the issue is browser-specific, test in another browser or a private window; since you\u2019re on Firefox 148, that\u2019s a reasonable quick check. That part is general browser troubleshooting, not n8n-specific.\n\nPlease route this to **n8n support for your Cloud plan** if you need confirmation whether this was removed or accidentally broken in Cloud 2.9.3.\n\nHandoff summary:\n- Problem: Missing \u201cfocus single column\u201d control in node Table view INPUT/OUTPUT panels after upgrading to n8n 2.9.3.\n- Setup: n8n Cloud, version 2.9.3, Firefox 148 on Ubuntu, affects multiple workflows.",
+  "passages": [
+   "changelog/release-notes.md#104",
+   "changelog/release-notes.md#44",
+   "changelog/README.md#27",
+   "build/work-with-data/filter-out-unwanted-data.md#0",
+   "changelog/release-notes.md#110",
+   "build/work-with-data/README.md#0",
+   "connect/create-nodes/plan-your-node/node-ui-design.md#4",
+   "deploy/host-n8n/configure-n8n/deploy-n8n-in-canvas-only-mode.md#0"
+  ],
+  "r1_outcome": "correct_handoff",
+  "r1_handoff": true,
+  "stratum": "H"
+ },
+ {
+  "rid": "v2:dev:257140:final",
+  "qid": 257140,
+  "version": "v2",
+  "reply": "The main issue is that an AI Agent is still probabilistic, so \u201conly use the tool\u201d prompts won\u2019t reliably force tool calls or prevent hallucinations.\n\n1. If you want deterministic control over tool usage, use the AI Agent\u2019s tool-level guardrails instead of prompt-only rules. n8n now supports **Human-in-the-loop for AI tool calls**: click the **+** icon on the AI Agent tool connection and choose **Add human review step** [7]. This is the only n8n feature in the excerpts that gives explicit approval control before a tool executes.\n\n2. For long responses and timeouts, check the agent\u2019s **Max Iterations** and **Enable Streaming** options. **Max Iterations** defaults to `10` [2], and **Enable Streaming** only works if the workflow trigger supports it, such as **Chat Trigger** or **Webhook** with **Response Mode** set to **Streaming** [2]. If your Instagram/Facebook workflow is not using a streaming-capable trigger, long generations can still time out.\n\n3. If you\u2019re using the **Conversational AI Agent**, note that it\u2019s deprecated from n8n `1.82.0` and removed in n8n `3.0`; new or updated workflows should use the **Tools Agent** instead [3]. That matters because the older agent is less suitable for tool-driven reliability.\n\n4. For the actual product lookup, make the Supabase lookup a hard step in the workflow rather than relying on the model to remember to call it. A general architecture fix outside n8n-specific docs is: retrieve products first, then pass only retrieved data into the model, instead of letting the model decide whether to search.\n\n5. If you need structured output from a tool step, the **AI Agent Tool** node can enforce a specific output format with **Require Specific Output Format** [4], which can help reduce malformed responses.\n\nIf you want, paste the workflow JSON and I can tell you whether you\u2019re on **Tools Agent** or the deprecated **Conversational Agent**, and where the timeout/tool-calling problem is most likely coming from.",
+  "passages": [
+   "build/ways-of-building-workflows/use-the-ai-assistant.md#2",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/tools-agent.md#3",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/conversational-agent.md#0",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolaiagent.md#1",
+   "integrations/builtin/app-nodes/n8n-nodes-langchain.openai/text-operations.md#2",
+   "contribute/contribution-guide-for-n8n-docs/terminology.md#3",
+   "changelog/README.md#31",
+   "build/ways-of-building-workflows/n8n-assistant.md#2"
+  ],
+  "r1_outcome": "confidently_wrong",
+  "r1_handoff": false,
+  "stratum": "W"
+ },
+ {
+  "rid": "v2:dev:297693:final",
+  "qid": 297693,
+  "version": "v2",
+  "reply": "The Outlook node docs here don\u2019t describe inline image handling, so I can\u2019t give you a verified n8n-specific method from the excerpts.\n\nWhat I can confirm:\n1. The **Microsoft Outlook** node documentation only covers authentication, supported mail operations, and government cloud settings [5].\n2. The **Send Email** node docs do explain attachments, but they do **not** say how to reference attachments inline with `cid:` in HTML [1].\n\nSo the safest answer is: I can\u2019t confirm from these docs whether the Microsoft Outlook node supports CID inline images, base64-embedded images, or only external `<img src=\"...\">` URLs.\n\nIf you want, I can still help you choose the most likely approach based on the exact Outlook action you\u2019re using in n8n (for example, whether it\u2019s a \u201csend message\u201d operation or a draft/message create flow), because that affects whether inline attachments are possible.",
+  "passages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.sendemail.md#1",
+   "contribute/contribution-guide-for-n8n-docs/style-guide-for-n8n-docs.md#20",
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#1",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#2",
+   "integrations/builtin/app-nodes/n8n-nodes-base.microsoftoutlook.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-base.uproc.md#17",
+   "integrations/builtin/trigger-nodes/n8n-nodes-base.microsoftoutlooktrigger.md#0",
+   "connect/create-nodes/build-your-node/using-the-n8n-node-tool.md#3"
+  ],
+  "r1_outcome": "correct_handoff",
+  "r1_handoff": true,
+  "stratum": "H"
+ },
+ {
+  "rid": "v1:dev:296107:final",
+  "qid": 296107,
+  "version": "v1",
+  "reply": "Yes \u2014 there is a submission and verification process for community nodes.\n\nFor n8n Cloud, **verified community nodes** can be discovered and installed from the **nodes panel**, but **unverified community nodes aren\u2019t available on n8n Cloud** and require self-hosting [1][5]. The docs also say that **submitting a node for verification by n8n** is the path to having it available for users to install, and n8n vets these nodes before listing them [5]. This is the only way to use custom nodes on Cloud [3].\n\n### High-level flow\n1. Build your node as an npm package [2][6].\n2. Make sure it follows the community node standards, including naming, keywords, and the `n8n` package metadata [2][6].\n3. Test it locally and lint it [2][6].\n4. Publish it to npm, and if you want verification through the n8n Creator Portal, publish with a **GitHub Actions workflow and provenance statement** [2][5].\n5. Submit it in the **n8n Creator Portal** for verification [4][5].\n\n### Notes\n- n8n can reject nodes that compete with paid features, especially enterprise functionality [4].\n- Verified community nodes have to follow technical and UX guidelines, and they **can\u2019t use runtime dependencies** [5].\n\nIf you want the exact submission requirements or to check whether a Neo4j extension can be verified, the docs are here:\n- **Submit community nodes** [4][5]\n- **Building community nodes** [6]\n\nIf you need help beyond that, I\u2019d recommend contacting **n8n support** or asking in the **n8n community forum**.",
+  "passages": [
+   "integrations/community-nodes/installation-and-management/README.md#0",
+   "connect/create-nodes/deploy-your-node/submit-community-nodes.md#0",
+   "connect/create-nodes/deploy-your-node/README.md#0",
+   "connect/create-nodes/deploy-your-node/submit-community-nodes.md#3",
+   "connect/create-nodes/deploy-your-node/submit-community-nodes.md#2",
+   "integrations/community-nodes/building-community-nodes.md#0"
+  ],
+  "r1_outcome": "resolved",
+  "r1_handoff": false,
+  "stratum": "A"
+ },
+ {
+  "rid": "v4:dev:274129:final",
+  "qid": 274129,
+  "version": "v4",
+  "reply": "I understand: your Switch node\u2019s \u201calways output\u201d seems to route empty matches to the first output instead of the expected output.\n\nThis needs a human because it appears to be a product behavior issue, and I can\u2019t confirm from the provided details whether it\u2019s a bug or expected routing logic.\n\nIf you think it\u2019s a bug, please open a GitHub issue on n8n-io/n8n; if this is about a Cloud account/billing/instance problem, contact n8n support for your plan; otherwise, please post it to the community forum for an experienced reply.\n\nProblem: Switch node with allMatchingOutputs/always output behavior routes empty outputs to the first branch.\nSetup: n8n 1.91.3, SQLite, default EXECUTIONS_PROCESS, nodejs 22.17.1, NixOS.",
+  "passages": [
+   "build/understand-workflows/workflow-components/work-with-nodes.md#1",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.code.md#1",
+   "build/code-in-n8n/use-built-in-shortcuts/n8n-metadata.md#1",
+   "deploy/host-n8n/install-options/one-line-setup.md#2",
+   "build/flow-logic/loop.md#1",
+   "changelog/v30-breaking-changes.md#5",
+   "build/work-with-data/README.md#0",
+   "deploy/host-n8n/install-options/install-with-npm.md#1"
+  ],
+  "r1_outcome": "correct_handoff",
+  "r1_handoff": true,
+  "stratum": "H"
+ },
+ {
+  "rid": "v3:dev:309298:final",
+  "qid": 309298,
+  "version": "v3",
+  "reply": "You\u2019re seeing expected behavior: n8n memory is session-based, so a new chat thread will not automatically inherit the prior thread\u2019s context [2][1].\n\n1. **Use the same session ID / Session Key** for the same conversation.\n   - In the **MongoDB Chat Memory** node, make sure **Session Key** is stable for that chat thread [5].\n   - If you generate a new Session Key for each thread, n8n treats it as a new memory.\n\n2. **Understand what the MongoDB memory stores.**\n   - It stores chat history for the conversation, not a \u201cglobal brain\u201d that searches all past conversations.\n   - The **Context Window Length** controls how many previous interactions are considered for context [5].\n\n3. **If you want a new thread to \u201cremember\u201d the old one, you need to carry over the same session identifier or explicitly load past data yourself.**\n   - That part is general app design, not a special n8n memory feature.\n\n4. **What n8n docs do support**\n   - n8n AI Agent nodes can use memory, but AI chains can\u2019t [1][2].\n   - The documentation here describes memory as ongoing conversation context, not semantic/episodic/procedural memory types [2].\n   - I don\u2019t see docs in the excerpts for those other memory categories, so I can\u2019t confirm n8n provides them as built-in memory modes.\n\nIf you want, I can help you map your workflow to a \u201csingle session chat\u201d pattern vs a \u201cretrieve facts from MongoDB on demand\u201d pattern.",
+  "passages": [
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memorymongochat.md#1",
+   "build/integrate-ai/understand-ai-components/how-memory-works.md#0",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memorypostgreschat.md#1",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memoryredischat.md#1",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memorymongochat.md#0",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/conversational-agent.md#0",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memoryxata.md#1",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memorymotorhead.md#1"
+  ],
+  "r1_outcome": "partial",
+  "r1_handoff": false,
+  "stratum": "W"
+ },
+ {
+  "rid": "v3:dev:296021:final",
+  "qid": 296021,
+  "version": "v3",
+  "reply": "You\u2019re already doing the right kinds of mitigations; the missing piece is whether you\u2019re on n8n Cloud or self-hosted, because the storage and scaling options differ.\n\nIf you\u2019re **self-hosted**, the usual pattern is:\n1. **Keep binary data out of memory** by setting `N8N_DEFAULT_BINARY_DATA_MODE` to `filesystem` for single-instance setups, or to `database` if you run **queue mode** [1].\n2. **Use queue mode** for heavier throughput so webhooks are received by the main/webhook process and executions run on workers [3].\n3. **Pass references, not files**, between stages: store the file in S3/R2/local storage externally and send only the URL/key to the next workflow. That\u2019s general architecture advice, not an n8n-specific setting.\n4. **Chunk the work** with `Split In Batches` and a sub-workflow so each execution only handles a small batch [2][8].\n5. If you\u2019re returning large webhook responses, queue mode has special handling and storage requirements [6].\n\nIf you\u2019re on **n8n Cloud**, the main levers are:\n1. Split the data into smaller chunks and use sub-workflows [2][4][8].\n2. Reduce saved execution data, especially successful runs [4].\n3. Upgrade the plan if memory is the bottleneck, since Cloud plans have fixed RAM limits [2][8].\n\nReply with just these 3 facts and I can give you the exact recommended setup:\n- n8n Cloud or self-hosted\n- whether you use queue mode\n- the largest file type/size you need to process",
+  "passages": [
+   "deploy/host-n8n/configure-n8n/scaling/handle-binary-data.md#0",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#0",
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#4",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#1",
+   "deploy/host-n8n/configure-n8n/scaling.md#0",
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#8",
+   "changelog/README.md#4",
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1"
+  ],
+  "r1_outcome": "resolved",
+  "r1_handoff": false,
+  "stratum": "A"
+ },
+ {
+  "rid": "v3:dev:295991:final",
+  "qid": 295991,
+  "version": "v3",
+  "reply": "The most likely issue is concurrent appends to Google Sheets: multiple webhook executions are trying to write at the same time, and the Sheets append behavior can misplace rows when the sheet/data layout isn\u2019t perfectly consistent [1][2].\n\n1. In your **Google Sheets** node, try switching from **Operation: Append Row** to **Append or Update Row** if you need de-duplication on a matching column [8].  \n2. If you truly want every upload logged as a new row, keep **Append Row**, but make sure the sheet has no gaps/breaks in the data region and that the header/data layout is consistent; n8n warns that the append endpoint can misalign writes when the sheet structure is inconsistent [1][2][7].  \n3. In the node, keep **Mapping Column Mode** set correctly for your input. Since you\u2019re sending `{{ $json.body.secure_url }}` into **Link photo**, your current mapping looks fine for a single field [7].  \n4. If bulk uploads still collide, the safe workaround is to serialize writes outside Google Sheets behavior itself (general concurrency handling): queue the incoming webhook events so only one write happens at a time.\n\nOne important note: all executions showing **Success** in n8n doesn\u2019t guarantee each row landed where you expected in Sheets; the docs explicitly note append can lead to wrong placement/misalignment under certain sheet conditions [1][2].\n\nIf you want, I can help you redesign this workflow so bulk webhook bursts are queued before the Sheets write step.",
+  "passages": [
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/sheet-operations.md#3",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/sheet-operations.md#1",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/sheet-operations.md#8",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/sheet-operations.md#10",
+   "integrations/builtin/trigger-nodes/n8n-nodes-base.googlesheetstrigger/common-issues.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/README.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/sheet-operations.md#2",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googlesheets/sheet-operations.md#0"
+  ],
+  "r1_outcome": "confidently_wrong",
+  "r1_handoff": false,
+  "stratum": "W"
+ },
+ {
+  "rid": "v4:dev:298507:final",
+  "qid": 298507,
+  "version": "v4",
+  "reply": "I understand: after updating n8n on TrueNAS, your Python-based workflows now fail with \u201cPython runner unavailable: Python 3 is missing from this system.\u201d\n\nThis needs a human because the root cause isn\u2019t clear from the info provided and we shouldn\u2019t guess on a setup-specific environment issue.\n\nIf this looks like a product bug, please open an issue on GitHub: n8n-io/n8n. If you\u2019re on n8n Cloud and this is an account/billing/instance problem, contact n8n support for your plan. Otherwise, post to the n8n Community Forum for an experienced review.\n\nHandoff summary:\nProblem: Python runner unavailable after n8n update on TrueNAS; all Python functions fail.\nVersion/setup: n8n 2.25.4 on TrueNAS 26.0.0-BETA.1, running via the TrueNAS app, EXECUTIONS_PROCESS \u201cown\u201d.",
+  "passages": [
+   "integrations/community-nodes/troubleshooting.md#0",
+   "changelog/v30-breaking-changes.md#1",
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#4",
+   "changelog/v20-breaking-changes.md#4",
+   "deploy/host-n8n/install-options/install-using-docker-compose.md#4",
+   "integrations/builtin/core-nodes/n8n-nodes-base.code/README.md#3",
+   "deploy/host-n8n/install-options/install-using-docker-compose.md#0",
+   "build/code-in-n8n/using-the-code-node.md#3"
+  ],
+  "r1_outcome": "unnecessary_handoff",
+  "r1_handoff": true,
+  "stratum": "H"
+ }
+]

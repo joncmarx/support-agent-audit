@@ -1,0 +1,743 @@
+<title>Support Agent Audit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="An AI support bot for n8n, tested on 240 real community-forum questions against a trust budget set in advance. Every reply, grade and reason.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: a QA scorecard read top to bottom. One reading column (about 66ch) for argument, wider figure bands (1080px) for the chart, the outcome bars and the reply explorer. */
+:root {
+  --paper: #F3F5F7; --surface: #FFFFFF; --sunken: #E8ECF1;
+  --ink: #152230; --ink-2: #3B4959; --muted: #627082; --rule: #D4DBE3;
+  --accent: #2446B0; --accent-soft: #E2E8F8;
+  --budget: #F2D34B; --budget-ink: #6A5400;
+  --o-resolved: #1F8A5B; --o-partial: #8BC69A; --o-rq: #2E94A2; --o-ch: #8492A7;
+  --o-uh: #E2BB70; --o-wh: #E3864A; --o-np: #C2C8D1; --o-cw: #C62F3B;
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --s-1: 13px; --s0: 15px; --s1: 18px; --s2: 22px; --s3: 30px; --s4: clamp(31px, 5.2vw, 48px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E141B; --surface: #151E28; --sunken: #1B2632;
+    --ink: #E6EBF1; --ink-2: #C1CBD6; --muted: #8E9BAB; --rule: #2A3745;
+    --accent: #93AEFF; --accent-soft: #1D2948;
+    --budget: #D9B932; --budget-ink: #F4DD78;
+    --o-resolved: #3DBB7F; --o-partial: #6CA679; --o-rq: #46B4C1; --o-ch: #8592A8;
+    --o-uh: #D3AA5B; --o-wh: #EE9358; --o-np: #4F5A68; --o-cw: #F0545E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E141B; --surface: #151E28; --sunken: #1B2632;
+  --ink: #E6EBF1; --ink-2: #C1CBD6; --muted: #8E9BAB; --rule: #2A3745;
+  --accent: #93AEFF; --accent-soft: #1D2948;
+  --budget: #D9B932; --budget-ink: #F4DD78;
+  --o-resolved: #3DBB7F; --o-partial: #6CA679; --o-rq: #46B4C1; --o-ch: #8592A8;
+  --o-uh: #D3AA5B; --o-wh: #EE9358; --o-np: #4F5A68; --o-cw: #F0545E;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--s1); line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.wrap { max-width: 1080px; margin: 0 auto; }
+.read { max-width: 680px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.12; letter-spacing: -0.01em; }
+h1 { font-size: var(--s4); font-weight: 800; }
+h2 { font-size: var(--s3); font-weight: 800; }
+h3 { font-size: var(--s1); font-weight: 700; letter-spacing: 0; }
+p { margin: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: var(--s-1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.stack-lg { display: flex; flex-direction: column; gap: 28px; }
+
+/* header */
+header.top { padding-block: 40px 8px; display: flex; flex-direction: column; gap: 22px; }
+.lede { font-size: clamp(20px, 2.4vw, 25px); line-height: 1.45; max-width: 760px; }
+.lede strong { font-weight: 600; }
+.score { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); }
+.score > div { padding: 18px 20px 18px 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.score > div + div { padding-left: 20px; border-left: 1px solid var(--rule); }
+.score .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(38px, 6vw, 60px); line-height: 1; font-variant-numeric: tabular-nums; }
+.score .big small { font-size: 0.42em; font-weight: 700; color: var(--muted); margin-left: 4px; }
+.score .what { font-family: var(--font-display); font-size: var(--s0); font-weight: 500; line-height: 1.35; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; width: fit-content; white-space: nowrap; }
+.pill.over { color: var(--o-cw); }
+.byline { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-display); font-size: var(--s0); color: var(--ink-2); }
+.byline a { font-weight: 700; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-mono); font-size: var(--s-1); padding-block: 14px; border-bottom: 1px solid var(--rule); }
+nav.toc a { color: var(--ink-2); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); text-decoration: underline; }
+
+section.block { padding-block: 56px 8px; display: flex; flex-direction: column; gap: 22px; }
+section.block > .head { display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+.prose { display: flex; flex-direction: column; gap: 14px; }
+.prose p { max-width: 66ch; }
+
+/* figures */
+figure { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+figcaption { font-size: var(--s0); color: var(--ink-2); max-width: 70ch; }
+.chart-scroll { overflow-x: auto; }
+svg text { font-family: var(--font-mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--font-display); font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; flex: none; }
+
+.bars { display: grid; grid-template-columns: minmax(150px, 230px) minmax(0, 1fr); gap: 8px 16px; align-items: center; }
+.bars .lab { font-family: var(--font-display); font-size: 14px; line-height: 1.25; }
+.bars .lab small { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.bar { display: flex; height: 22px; border-radius: 3px; overflow: hidden; background: var(--sunken); }
+.bar span { display: block; height: 100%; }
+.bars .sep { grid-column: 1 / -1; border-top: 1px dashed var(--rule); margin-block: 4px; }
+
+/* tables */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: var(--s0); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--ink-2); background: var(--sunken); }
+td.n, th.n { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td .sub { display: block; font-size: 13px; color: var(--muted); }
+tr.group td { background: var(--sunken); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-block: 6px; }
+.cw { color: var(--o-cw); font-weight: 600; }
+
+/* incident cards */
+.incidents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.incident { background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--o-cw); border-radius: 4px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.incident h3 { font-size: 17px; }
+.incident p { font-size: var(--s0); }
+.incident .meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.incident button.linkish { align-self: flex-start; }
+
+.callout { border-left: 3px solid var(--budget); padding: 4px 0 4px 16px; font-size: var(--s1); max-width: 66ch; }
+
+/* predictions & timeline */
+ol.timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; max-width: 820px; }
+ol.timeline li { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; padding-block: 12px; border-top: 1px solid var(--rule); }
+ol.timeline .when { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
+ol.timeline b { font-family: var(--font-display); }
+.hit { color: var(--o-resolved); font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: .04em; }
+.miss { color: var(--o-cw); font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: .04em; }
+
+/* docs gap */
+.themes { display: flex; flex-direction: column; gap: 10px; }
+details.theme { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; }
+details.theme > summary { cursor: pointer; padding: 12px 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; list-style: none; }
+details.theme > summary::-webkit-details-marker { display: none; }
+details.theme > summary .t { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+details.theme > summary .c { font-family: var(--font-mono); font-size: 13px; color: var(--muted); align-self: start; }
+details.theme > summary .s { grid-column: 1 / -1; font-size: var(--s0); color: var(--ink-2); }
+details.theme > summary .s::after { content: " Show questions ›"; font-family: var(--font-display); font-size: 13px; color: var(--accent); white-space: nowrap; }
+details.theme[open] > summary .s::after { content: " Hide questions ‹"; }
+details.theme ul { margin: 0; padding: 0 16px 14px 16px; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+details.theme li { font-size: var(--s0); border-top: 1px solid var(--rule); padding-top: 10px; }
+details.theme li a { font-family: var(--font-display); font-weight: 700; }
+details.theme li .fix { display: block; color: var(--ink-2); }
+.grp-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.grp-title .mono { color: var(--muted); font-size: var(--s0); }
+
+/* explorer */
+.controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; }
+.controls label { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+select, input[type="search"] { font: 15px var(--font-display); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 9px; min-width: 0; max-width: 100%; }
+input[type="search"] { width: 240px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; }
+.seg button { font: 600 14px var(--font-display); background: var(--paper); color: var(--ink-2); border: 0; padding: 7px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.count { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.qlist { display: flex; flex-direction: column; gap: 8px; }
+.q { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; }
+.q > button.qhead { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 11px 14px; }
+.q > button.qhead:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.q .qt { font-family: var(--font-display); font-weight: 700; font-size: 15.5px; line-height: 1.3; min-width: 0; overflow-wrap: anywhere; }
+.q .qid { font-family: var(--font-mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 600 12px var(--font-display); padding: 2px 8px 2px 6px; border-radius: 3px; background: var(--sunken); color: var(--ink); white-space: nowrap; }
+.chip i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.qbody { border-top: 1px solid var(--rule); padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px; }
+.kv { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 6px 14px; font-size: var(--s0); }
+.kv dt { font-family: var(--font-mono); font-size: 12px; color: var(--muted); padding-top: 3px; letter-spacing: .03em; }
+.kv dd { margin: 0; min-width: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tabs button { font: 600 13px var(--font-display); border: 1px solid var(--rule); background: var(--paper); color: var(--ink-2); border-radius: 4px; padding: 4px 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.tabs button i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.tabs button[aria-selected="true"] { border-color: var(--ink); color: var(--ink); background: var(--surface); box-shadow: inset 0 -2px 0 var(--ink); }
+.reply { white-space: pre-wrap; font-size: 15.5px; line-height: 1.55; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; overflow-wrap: anywhere; max-height: 460px; overflow-y: auto; }
+.reply code { font-family: var(--font-mono); font-size: 13.5px; background: var(--sunken); padding: 0 3px; border-radius: 2px; }
+.grades { display: flex; flex-direction: column; gap: 10px; }
+.grade { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 4px 14px; font-size: 14.5px; }
+.grade .who { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; display: flex; flex-direction: column; gap: 4px; }
+.grade p { color: var(--ink-2); }
+.settle { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+button.linkish { font: 600 14px var(--font-display); color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.more { align-self: center; font: 700 14px var(--font-display); background: var(--ink); color: var(--paper); border: 0; border-radius: 4px; padding: 9px 16px; cursor: pointer; }
+.loading { font-family: var(--font-mono); font-size: 13px; color: var(--muted); padding: 12px 0; }
+
+/* method */
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; }
+.cols > div { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.cols ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: var(--s0); }
+footer { padding-block: 48px 64px; margin-top: 40px; border-top: 2px solid var(--ink); display: flex; flex-direction: column; gap: 8px; font-family: var(--font-display); font-size: var(--s0); color: var(--ink-2); }
+
+@media (max-width: 760px) {
+  .score { grid-template-columns: minmax(0, 1fr); }
+  .score > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .incidents, .cols { grid-template-columns: minmax(0, 1fr); }
+  .bars { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .bars .bar { margin-bottom: 8px; }
+  ol.timeline li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .kv, .grade { grid-template-columns: minmax(0, 1fr); }
+  .q > button.qhead { grid-template-columns: minmax(0, 1fr) auto; }
+  .q > button.qhead .chip { grid-column: 1 / -1; width: fit-content; }
+  input[type="search"] { width: 100%; }
+  .controls label { flex: 1 1 100%; }
+  figure { padding: 14px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .q, details.theme { transition: border-color .15s; }
+  .q:hover, details.theme:hover { border-color: var(--muted); }
+}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Support Agent Audit · n8n community forum · 240 solved threads</div>
+  <h1>How often is an AI support agent confidently wrong?</h1>
+  <p class="lede">I built a support bot that answers from n8n's public docs and set a trust budget before the final test: <strong>no more than 2 confidently wrong answers per 100 questions</strong>. On 100 real questions sealed away until the end, the safest version I could build gave <strong>4</strong>. It also answered only 5 on its own.</p>
+  <div class="score" role="list">
+    <div role="listitem">
+      <div class="big">4<small>per 100</small></div>
+      <div class="what">confidently wrong answers on the sealed holdout. Budget: 2.</div>
+      <span class="pill over">Over budget</span>
+    </div>
+    <div role="listitem">
+      <div class="big">5<small>of 100</small></div>
+      <div class="what">questions fully answered with no human involved</div>
+    </div>
+    <div role="listitem">
+      <div class="big">87%</div>
+      <div class="what">of the questions the bot could have answered were handed to a person anyway</div>
+    </div>
+  </div>
+  <div class="byline">
+    <span>Jonathan Marx · October 2026</span>
+    <a href="case-study.html">One-page case study</a>
+    <a href="https://github.com/joncmarx/support-agent-audit">Code and data on GitHub</a>
+    <span class="mono" style="font-size:14px">Model spend: $73</span>
+  </div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#tradeoff">The trade-off</a>
+    <a href="#levers">What moved it</a>
+    <a href="#holdout">The final test</a>
+    <a href="#lead">A support lead's read</a>
+    <a href="#gaps">Where the fixes lived</a>
+    <a href="#wrong">What I got wrong</a>
+    <a href="#replies">Every reply</a>
+    <a href="#method">How it was tested</a>
+  </nav>
+</header>
+
+<section class="block" id="tradeoff">
+  <div class="head">
+    <div class="eyebrow">Test set · 97 questions · every version</div>
+    <h2>Every version on one chart</h2>
+    <div class="prose"><p>Each question came from the n8n community forum and already had an accepted answer from another member, so every reply was graded against a fix that worked. Right on the chart is more questions fully answered. Up is more confident wrong answers. The yellow band is the trust budget.</p></div>
+  </div>
+  <figure>
+    <div class="chart-scroll"><svg id="chart" viewBox="0 0 760 470" role="img" aria-labelledby="chart-t chart-d" style="width:100%;min-width:560px;height:auto;display:block"><title id="chart-t">Fully answered versus confidently wrong, per 100 test questions</title><desc id="chart-d">Each version of the bot is a dot with its 95% range. Only the versions that hand off almost everything sit at or near the trust budget.</desc></svg></div>
+    <figcaption>The versions in or just above the band answer almost nothing on their own. The versions that answer more sit far above it. No version reached the bottom right. Lines show each count's exact 95% range. The hollow diamond is the final version on the sealed holdout (100 questions). The dot at zero is a bot that hands every question to a person.</figcaption>
+  </figure>
+  <figure>
+    <div class="eyebrow">Where the questions went</div>
+    <div class="bars" id="bars"></div>
+    <div class="legend" id="legend"></div>
+  </figure>
+</section>
+
+<section class="block" id="levers">
+  <div class="head">
+    <div class="eyebrow">Same questions, same docs, one change at a time</div>
+    <h2>What moved the number, and what didn't</h2>
+    <div class="prose">
+      <p>I started from one model (OpenAI's gpt-5.4-mini) drafting answers from the 8 most relevant docs passages, then changed one thing at a time. Every version answered the same 97 questions, so differences are measured question by question. I call a difference clear only when its 95% range excludes zero.</p>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table id="levers-t"></table></div>
+  <div class="callout">Two changes clearly cut confident wrong answers. v4's own reviewer cut them from 30 to 2, but it blocked 13 of the 19 right answers, so fully answered fell from 19 to 6. A stronger drafting model cut them from 30 to 10 while still answering 24. A rewritten prompt and the forum's own past answers made no clear difference.</div>
+</section>
+
+<section class="block" id="holdout">
+  <div class="head">
+    <div class="eyebrow">Sealed holdout · 100 questions · run once</div>
+    <h2>The final test</h2>
+    <div class="prose">
+      <p>I sealed 100 questions on September 30 and opened them on October 16, after freezing the final version and writing down what I expected. Only one configuration had passed the practice screen (at most 1 confident error in 43 practice questions): v4 as built, where the same model reviews each draft and anything it can't verify becomes a handoff to a person. That version ran once on the holdout.</p>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table id="holdout-t"></table></div>
+  <h3>The four trust incidents</h3>
+  <div class="incidents">
+    <article class="incident">
+      <div class="meta">#253054 · fix was in the docs · wrong fix · both graders</div>
+      <h3>"Adding python"</h3>
+      <p>The bot told the customer Python is gone from the Code node in n8n 2. It isn't: it runs through an external task runner. Its reviewer approved the reply.</p>
+      <button class="linkish" data-open="holdout:253054">Read the reply and grades</button>
+    </article>
+    <article class="incident">
+      <div class="meta">#278295 · only n8n staff can act · wrong fact · both graders</div>
+      <h3>"How to create a language section in Tutorials"</h3>
+      <p>Only the n8n team can add a forum section. The bot told the customer to post in a Polish subcategory that doesn't exist. Its reviewer approved the reply.</p>
+      <button class="linkish" data-open="holdout:278295">Read the reply and grades</button>
+    </article>
+    <article class="incident">
+      <div class="meta">#311932 · not in the docs · wrong fact · 2 of 3 graders</div>
+      <h3>"ABCorp's old data warehouse"</h3>
+      <p>The course had been retired. The bot handed the customer off to wait for a welcome email that will never come. Its reviewer approved the handoff.</p>
+      <button class="linkish" data-open="holdout:311932">Read the reply and grades</button>
+    </article>
+    <article class="incident">
+      <div class="meta">#290067 · not in the docs · graders split three ways</div>
+      <h3>"Prod N8N WhatsApp Trigger not working"</h3>
+      <p>The first draft pointed at the webhook registration, which is where the accepted fix lies: re-activating the workflow re-registers it with Meta. The reviewer blocked the draft as speculation. The handoff written in its place blamed an n8n bug and sent the customer to GitHub.</p>
+      <button class="linkish" data-open="holdout:290067">Read the reply and grades</button>
+    </article>
+  </div>
+  <div class="prose read">
+    <p>Three of the four went out because the reviewer approved them. The fourth went out because the reviewer blocked a draft that was closer to the fix than the handoff that replaced it (drafts on the holdout weren't graded). The reviewer runs on the same model as the drafter, and it missed what the drafter missed. Under the rule fixed in advance, a three-way grader split counts as confidently wrong when any grader saw a material error stated as the answer, so #290067 counts.</p>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Written down before the holdout opened</th><th class="n">Result</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Fully answered: 3 to 10 of 100</td><td class="n">5</td><td><span class="hit">HIT</span></td></tr>
+      <tr><td>Confidently wrong: 0 to 4 of 100</td><td class="n">4</td><td><span class="hit">HIT</span></td></tr>
+      <tr><td>The trust budget (at most 2 of 100) is met. I put this at about 60%.</td><td class="n">4</td><td><span class="miss">MISSED</span></td></tr>
+      <tr><td>Unnecessary handoffs: 80 to 95 per 100 answerable questions</td><td class="n">87</td><td><span class="hit">HIT</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="block" id="lead">
+  <div class="head">
+    <div class="eyebrow">Ten flagged replies, read the way a support lead QAs an agent</div>
+    <h2>Strict graders, and a support lead</h2>
+    <div class="prose">
+      <p>The graders count a reply as confidently wrong when it states a wrong fix or a material false claim as the answer. I read the 10 replies they flagged for the stronger drafting model (version D) and asked one question of each: would I send this to a customer? I didn't see the graders' verdicts, though I knew all 10 had been flagged.</p>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table id="lead-t"></table></div>
+  <div class="callout">The graders count 10 trust incidents. I count 2. Where they saw a material error stated as fact, I mostly saw a reply that missed the better fix, and three I'd send as written. A missed fix costs the customer time; a wrong fix costs their trust. On this sample, the strict graders make the headline a cautious count.</div>
+</section>
+
+<section class="block" id="gaps">
+  <div class="head">
+    <div class="eyebrow">Docs-gap report · all 240 questions</div>
+    <h2>Where the fixes lived</h2>
+    <div class="prose">
+      <p>Two labelers from different companies, a blind tie-breaker and my own reading of their disagreements decided where each question's fix lived, without seeing any bot's reply. That answer key says which questions a docs bot should answer and which it should hand off. It also says which articles n8n could write next.</p>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table id="gap-t"></table></div>
+  <div id="gap-groups" class="stack-lg"></div>
+  <p class="muted read" style="font-size:var(--s0)">Fix summaries are the labeler's one-line paraphrase of the accepted answer, not the forum's text. Follow the link to read the thread and credit its author. Thanks to n8n's docs team for open, versioned docs, and to the forum members whose answers made the answer key.</p>
+</section>
+
+<section class="block" id="wrong">
+  <div class="head">
+    <div class="eyebrow">Three weeks, in order</div>
+    <h2>What I got wrong along the way</h2>
+  </div>
+  <ol class="timeline">
+    <li><span class="when">Sep 29</span><div><b>Round one.</b> Four versions of the bot. The last one bluffed once in 97 questions but handed 90 to a person. Its headline score tied a bot that hands off everything.</div></li>
+    <li><span class="when">Sep 30</span><div><b>I audited the test instead of the bot.</b> An outside AI review of my test plan then found 30 problems. The rewrite fixed the answer key and the grading, locked the trust budget at 2 per 100, and sealed 100 questions away.</div></li>
+    <li><span class="when">Oct 1</span><div><b>Every grader failed my calibration screen.</b> Five models matched my 20 blind grades only 8 to 11 times out of 19. My grading form never defined "correct" or "partial", so the models and I were answering different questions. My grades became a finding instead of a gate.</div></li>
+    <li><span class="when">Oct 12</span><div><b>The answer key was wrong.</b> Round one said 69% of test questions needed a person. The corrected labels say 31%. I had predicted 50 to 65%.</div></li>
+    <li><span class="when">Oct 13</span><div><b>Round one's grades were too kind.</b> Re-graded blind, the default bot was confidently wrong 18 times, not 9. No outside reviewer model passed the practice screen, so I measured each lever on raw drafts instead.</div></li>
+    <li><span class="when">Oct 14</span><div><b>The lever that worked.</b> A stronger drafting model cut confident wrong answers from 30 to 10 on the same questions and passages.</div></li>
+    <li><span class="when">Oct 15–16</span><div><b>Two levers that didn't.</b> A rewritten prompt and the forum's own past answers made no clear difference. One forum workaround became the only unsafe reply in the study: the bot passed on another user's fix, "deleting and recreating both the table and the match_documents function," which would wipe the customer's stored data. A friendlier handoff template took practice bluffs from 0 to 5.</div></li>
+    <li><span class="when">Oct 16–21</span><div><b>The final test.</b> Froze the final version, opened the holdout: 4 confident wrong answers in 100. Budget missed.</div></li>
+  </ol>
+  <div class="head"><h3>Predictions about the results, written down before each run</h3><p class="muted" style="font-size:var(--s0)">22 predictions; 12 hit. A missed prediction is reported, never re-tuned. The full log in the repository also holds predictions about the measuring itself, such as parse rates and grader agreement.</p></div>
+  <div class="tbl-wrap"><table id="pred-t"></table></div>
+</section>
+
+<section class="block" id="replies">
+  <div class="head">
+    <div class="eyebrow">1,166 graded replies · 240 questions · 9 versions</div>
+    <h2>Read every reply and every grade</h2>
+    <div class="prose"><p>Pick a question set and a version. Each question shows the fix that worked, the bot's reply, and each grader's verdict with its reasoning. The question text itself stays on the forum: follow the link to read it.</p></div>
+  </div>
+  <div class="controls">
+    <label>Question set
+      <span class="seg" id="set-seg" role="group" aria-label="Question set">
+        <button type="button" data-set="holdout" aria-pressed="true">Holdout 100</button><button type="button" data-set="test" aria-pressed="false">Test 97</button><button type="button" data-set="practice" aria-pressed="false">Practice 43</button>
+      </span>
+    </label>
+    <label for="arm-sel">Version<select id="arm-sel"></select></label>
+    <label for="out-sel">Outcome<select id="out-sel"></select></label>
+    <label for="q-search">Search titles<input type="search" id="q-search" placeholder="webhook, Code node, Gmail…"></label>
+  </div>
+  <div class="count" id="q-count" aria-live="polite"></div>
+  <div class="qlist" id="qlist"><div class="loading">Loading the holdout replies…</div></div>
+  <button type="button" class="more" id="more" hidden>Show 40 more</button>
+</section>
+
+<section class="block" id="method">
+  <div class="head">
+    <div class="eyebrow">Method, claims and limits</div>
+    <h2>How it was tested</h2>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>The questions</h3>
+      <ul>
+        <li>240 solved threads from the n8n community forum, January to September 2026. Each accepted answer was written by someone other than the asker.</li>
+        <li>43 practice questions shaped round one's versions and screened the later ones. 97 test questions scored each version once. 100 holdout questions stayed sealed until the final version was frozen.</li>
+        <li>The bot reads n8n's docs pinned to one commit: hybrid search, 8 passages per question.</li>
+      </ul>
+      <h3>The grading</h3>
+      <ul>
+        <li>Two graders from different companies (Claude Sonnet 5.5 and Gemini 3.8 Flash) graded every reply blind: no version names, no answer-key labels. Muse Spark 1.3 broke ties. None of them comes from OpenAI, which made the bot's drafting models.</li>
+        <li>The rubric is the Confidence Equation from <em>The Modern CSM</em>: competence (the right fix), reliability (no false claims) and empathy (did it hear what they meant), divided by uncertainty (asking or handing off when it should).</li>
+        <li>On the 403-reply re-grade, the two graders agreed on the outcome 72% of the time before tie-breaks (κ 0.64).</li>
+        <li>Eight outcomes. "Confidently wrong" means a wrong fix or a false claim stated as the answer.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What I claim, and what I don't</h3>
+      <ul>
+        <li>"Fully answered" means the graders matched the reply to the accepted fix. No customer was asked whether their problem went away.</li>
+        <li>4 in 100 has an exact 95% range of 1.1 to 9.9 per 100. The true rate could be under 2 or near 10. The budget was missed as defined, on this sample.</li>
+        <li>"Chosen by rule" is not "clearly better". The final version was the only one eligible under rules written in advance.</li>
+      </ul>
+      <h3>Limits</h3>
+      <ul>
+        <li>People post on a forum after the docs failed them, so these questions are harder than a typical support queue.</li>
+        <li>One product, in English. Each version ran once per question; model runs can't be made exactly repeatable.</li>
+        <li>The graders and labelers are models. Their reasoning is published with each grade so you can check it (Gemini left it blank on 104 of the 1,166 replies).</li>
+        <li>Model spend: $73 in total ($19 for round one, $54 for the rebuild), run through OpenRouter.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Built by Jonathan Marx. The questions and accepted answers belong to the n8n community; every link goes to the original thread.</div>
+  <div><a href="case-study.html">One-page case study</a> · <a href="https://github.com/joncmarx/support-agent-audit">Code and data on GitHub</a> · <a href="https://github.com/joncmarx/support-agent-audit/blob/main/DOCS-GAP.md">Docs-gap report (Markdown)</a></div>
+</footer>
+</div>
+
+<script type="application/json" id="data">/*__DATA__*/</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("data").textContent);
+  var S = D.summary.scores;
+  var OUT = ["resolved", "partial", "right_question", "correct_handoff", "unnecessary_handoff", "wrong_hedged", "no_progress", "confidently_wrong"];
+  var OUTL = { resolved: "Fully answered", partial: "Partial", right_question: "Right question", correct_handoff: "Correct handoff",
+    unnecessary_handoff: "Unnecessary handoff", wrong_hedged: "Hedged wrong", no_progress: "No progress", confidently_wrong: "Confidently wrong" };
+  var OVAR = { resolved: "--o-resolved", partial: "--o-partial", right_question: "--o-rq", correct_handoff: "--o-ch",
+    unnecessary_handoff: "--o-uh", wrong_hedged: "--o-wh", no_progress: "--o-np", confidently_wrong: "--o-cw" };
+  var ARM = {
+    handoff_all: { n: "Hand off everything", d: "every question to a person" },
+    v1: { n: "v1 · default prompt", d: "round one's docs-bot instructions" },
+    A_draft: { n: "v4 drafts", d: "before its reviewer" },
+    A: { n: "v4 as built (final)", d: "drafts reviewed by the same model" },
+    B: { n: "B · outside reviewer", d: "MiMo-V2.6-Pro reviews v4's drafts" },
+    D: { n: "D · stronger drafter", d: "GPT-6.1 Sol, no reviewer" },
+    DF: { n: "DF · Sol, new prompt, forum answers", d: "practice only" },
+    F0: { n: "F0 · rewritten prompt", d: "gpt-5.4-mini, no reviewer" },
+    F: { n: "F · rewritten prompt + forum answers", d: "past accepted answers added" },
+    G: { n: "G · friendlier handoffs", d: "practice only" }
+  };
+  var CAT = { n8n_docs: "In n8n's docs", general_tech: "General know-how", undocumented_n8n: "n8n know-how not in the docs",
+    bug_or_release: "Known bug or release issue", account_access: "Only n8n staff can act" };
+  function el(tag, attrs, html) { var e = document.createElement(tag); if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function css(v) { return "var(" + v + ")"; }
+  function chip(o) { return o ? '<span class="chip"><i style="background:' + css(OVAR[o]) + '"></i>' + OUTL[o] + "</span>" : '<span class="chip">Not graded</span>'; }
+  function per100(k, n) { return Math.round(1000 * k / n) / 10; }
+
+  /* ---------- decision chart ---------- */
+  (function chart() {
+    var svg = document.getElementById("chart"), NS = "http://www.w3.org/2000/svg";
+    var W = 760, H = 470, L = 58, R = 24, T = 18, B = 52, X0 = 0, X1 = 40, Y0 = 0, Y1 = 50;
+    function sx(v) { return L + (v - X0) / (X1 - X0) * (W - L - R); }
+    function sy(v) { return H - B - (v - Y0) / (Y1 - Y0) * (H - T - B); }
+    function add(tag, a, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; svg.appendChild(e); return e; }
+    add("rect", { x: sx(0), y: sy(2), width: sx(X1) - sx(0), height: sy(0) - sy(2), fill: css("--budget"), opacity: "0.55" });
+    for (var x = 0; x <= X1; x += 5) {
+      add("line", { x1: sx(x), x2: sx(x), y1: sy(Y0), y2: sy(Y1), stroke: css("--rule"), "stroke-width": 1 });
+      add("text", { x: sx(x), y: H - B + 18, "text-anchor": "middle", "font-size": 11, fill: css("--muted") }, x);
+    }
+    for (var y = 0; y <= Y1; y += 10) {
+      add("line", { x1: sx(X0), x2: sx(X1), y1: sy(y), y2: sy(y), stroke: css("--rule"), "stroke-width": 1 });
+      add("text", { x: L - 8, y: sy(y) + 4, "text-anchor": "end", "font-size": 11, fill: css("--muted") }, y);
+    }
+    add("text", { x: (L + W - R) / 2, y: H - 10, "text-anchor": "middle", "font-size": 12, fill: css("--ink-2") }, "Fully answered per 100 questions →");
+    add("text", { x: 14, y: (T + H - B) / 2, "text-anchor": "middle", "font-size": 12, fill: css("--ink-2"), transform: "rotate(-90 14 " + (T + H - B) / 2 + ")" }, "Confidently wrong per 100 →");
+    add("text", { x: sx(X1) - 6, y: sy(2) - 6, "text-anchor": "end", "font-size": 11, fill: css("--budget-ink") }, "Trust budget: 2 per 100");
+    var t = S.test, pts = [
+      { k: "handoff_all", x: 0, y: 0, lab: "hand off all", dx: 6, dy: -6, a: "start", small: 1 },
+      { k: "v1", lab: "v1 default", dx: 10, dy: 4, a: "start" },
+      { k: "A_draft", lab: "v4 drafts", dx: -10, dy: -10, a: "end" },
+      { k: "A", lab: "v4 as built", dx: 12, dy: 5, a: "start" },
+      { k: "B", lab: "B outside reviewer", dx: -10, dy: -6, a: "end" },
+      { k: "D", lab: "D stronger drafter", dx: 10, dy: 16, a: "start" },
+      { k: "F0", lab: "F0 new prompt", dx: -10, dy: -12, a: "end" },
+      { k: "F", lab: "F + forum answers", dx: 10, dy: 16, a: "start" }
+    ];
+    pts.forEach(function (p) {
+      var s = t[p.k];
+      if (s) {
+        p.x = per100(s.resolved, s.n); p.y = per100(s.confidently_wrong, s.n);
+        var rr = s.resolved_range_95_per_100, cr = s.trust_range_95_per_100;
+        add("line", { x1: sx(rr[0]), x2: sx(rr[1]), y1: sy(p.y), y2: sy(p.y), stroke: css("--muted"), "stroke-width": 1.2, opacity: 0.55 });
+        add("line", { x1: sx(p.x), x2: sx(p.x), y1: sy(cr[0]), y2: sy(cr[1]), stroke: css("--muted"), "stroke-width": 1.2, opacity: 0.55 });
+      }
+      var hot = p.k === "A";
+      add("circle", { cx: sx(p.x), cy: sy(p.y), r: hot ? 7 : 6, fill: hot ? css("--ink") : css("--accent"), stroke: css("--surface"), "stroke-width": 2 });
+      add("text", { x: sx(p.x) + p.dx, y: sy(p.y) + p.dy, "text-anchor": p.a, "font-size": p.small ? 11 : 12, "font-weight": hot ? 600 : 400, fill: p.small ? css("--muted") : css("--ink") }, p.lab);
+    });
+    var h = S.holdout.A, hx = per100(h.resolved, h.n), hy = per100(h.confidently_wrong, h.n), c = [sx(hx), sy(hy)];
+    add("path", { d: "M" + c[0] + " " + (c[1] - 8) + " L" + (c[0] + 8) + " " + c[1] + " L" + c[0] + " " + (c[1] + 8) + " L" + (c[0] - 8) + " " + c[1] + " Z", fill: css("--surface"), stroke: css("--o-cw"), "stroke-width": 2.2 });
+    add("text", { x: c[0] + 14, y: c[1] - 4, "font-size": 12, "font-weight": 600, fill: css("--o-cw") }, "Final version, holdout: 5 and 4");
+  })();
+
+  /* ---------- outcome bars ---------- */
+  (function bars() {
+    var box = document.getElementById("bars"), rows = [];
+    var ha = D.summary.handoff_all.test;
+    rows.push({ lab: ARM.handoff_all.n, sub: "test · 97", c: { correct_handoff: ha.correct_handoff, unnecessary_handoff: ha.unnecessary_handoff }, n: 97 });
+    ["v1", "A_draft", "A", "B", "D", "F0", "F"].forEach(function (k) { rows.push({ lab: ARM[k].n, sub: "test · 97", c: S.test[k], n: S.test[k].n }); });
+    rows.push("sep");
+    rows.push({ lab: ARM.A.n, sub: "sealed holdout · 100", c: S.holdout.A, n: 100 });
+    rows.forEach(function (r) {
+      if (r === "sep") { box.appendChild(el("div", { "class": "sep" })); return; }
+      box.appendChild(el("div", { "class": "lab" }, esc(r.lab) + "<small>" + r.sub + " · " + (r.c.confidently_wrong || 0) + " confidently wrong</small>"));
+      var b = el("div", { "class": "bar", role: "img", "aria-label": OUT.map(function (o) { return OUTL[o] + " " + (r.c[o] || 0); }).join(", ") });
+      OUT.forEach(function (o) { var v = r.c[o] || 0; if (v) { var s = el("span", { title: OUTL[o] + ": " + v }); s.style.width = (100 * v / r.n) + "%"; s.style.background = css(OVAR[o]); b.appendChild(s); } });
+      box.appendChild(b);
+    });
+    var lg = document.getElementById("legend");
+    OUT.forEach(function (o) { lg.appendChild(el("span", null, '<i class="sw" style="background:' + css(OVAR[o]) + '"></i>' + OUTL[o])); });
+  })();
+
+  /* ---------- levers table ---------- */
+  (function levers() {
+    var P = {}; D.summary.paired_test.forEach(function (p) { P[p.a + ">" + p.b + ">" + p.outcome] = p; });
+    function sg(v) { return (v > 0 ? "+" : v < 0 ? "\u2212" : "") + Math.abs(v); }
+    function rng(p) { return sg(p.diff_per_100) + " per 100 (range " + sg(p.range_95[0]) + " to " + sg(p.range_95[1]) + ")"; }
+    var rv = D.summary.reviewers.test;
+    var vt = rv.v4, mt = rv["xiaomi/mimo-v2.6-pro"];
+    var rows = [
+      ["A_draft", "Starting point: v4's drafts", "gpt-5.4-mini, its own prompt, no review", "Baseline for the rows below"],
+      ["A", "Add a reviewer (same model)", "the final version", "Caught " + vt.drafts_blocked.confidently_wrong + " of 30 bluffs, but blocked " + vt.drafts_blocked.resolved + " of 19 right answers"],
+      ["B", "Use an outside reviewer", "Xiaomi MiMo-V2.6-Pro, the closest of three to the budget on practice", "Let " + mt.drafts_let_through.confidently_wrong + " of 30 bluffs through. Answers more than v4 as built: " + rng(P["B>A>resolved"])],
+      ["D", "Swap the drafting model", "OpenAI GPT-6.1 Sol, same prompt and passages", "<b>Clearly fewer bluffs than v4's drafts:</b> " + rng(P["D>A_draft>confidently_wrong"])],
+      ["F0", "Rewrite the prompt", "gpt-5.4-mini", "No clear change from v4's drafts in either column"],
+      ["F", "Add the forum's earlier answers", "F0's prompt plus up to 3 past accepted answers", "No clear change from F0: " + rng(P["F>F0>resolved"]) + " fully answered. The study's one unsafe reply."]
+    ];
+    var h = '<thead><tr><th>What I changed</th><th class="n">Fully answered</th><th class="n">Confidently wrong</th><th class="n">Unnecessary handoffs<br>per 100 answerable</th><th>Result</th></tr></thead><tbody>';
+    rows.forEach(function (r) {
+      var s = S.test[r[0]];
+      h += "<tr><td><b>" + r[1] + "</b><span class=\"sub\">" + esc(ARM[r[0]].n) + " · " + r[2] + "</span></td><td class=\"n\">" + s.resolved + "</td><td class=\"n cw\">" + s.confidently_wrong + "</td><td class=\"n\">" + Math.round(s.unnecessary_per_100_answerable) + "</td><td>" + r[3] + "</td></tr>";
+    });
+    h += '<tr class="group"><td colspan="5">Practice only (43 questions): tried, failed the practice screen, never run on test</td></tr>';
+    [["DF", "Sol + rewritten prompt + forum answers", "added after D's result"], ["G", "Friendlier handoff template", "v4 as built, handoffs say what can be told"]].forEach(function (r) {
+      var s = S.dev[r[0]];
+      h += "<tr><td><b>" + r[1] + "</b><span class=\"sub\">" + esc(ARM[r[0]].n) + " · " + r[2] + "</span></td><td class=\"n\">" + s.resolved + "</td><td class=\"n cw\">" + s.confidently_wrong + "</td><td class=\"n\">" + Math.round(s.unnecessary_per_100_answerable) + "</td><td>" + (r[0] === "G" ? "Bluffs came back in the handoffs: v4 as built had " + S.dev.A.confidently_wrong + " on practice, G had " + s.confidently_wrong : "Screen allows at most 1 of 43") + "</td></tr>";
+    });
+    document.getElementById("levers-t").innerHTML = h + "</tbody>";
+  })();
+
+  /* ---------- holdout table ---------- */
+  (function holdout() {
+    var s = S.holdout.A, h = "<thead><tr>";
+    OUT.forEach(function (o) { h += '<th class="n">' + OUTL[o] + "</th>"; });
+    h += "</tr></thead><tbody><tr>";
+    OUT.forEach(function (o) { h += '<td class="n' + (o === "confidently_wrong" ? " cw" : "") + '">' + s[o] + (o === "unnecessary_handoff" ? '<span class="sub">of ' + s.answerable + " answerable</span>" : "") + (o === "confidently_wrong" ? '<span class="sub">range ' + s.trust_range_95_per_100[0] + "–" + s.trust_range_95_per_100[1] + "</span>" : "") + "</td>"; });
+    document.getElementById("holdout-t").innerHTML = h + "</tr></tbody>";
+  })();
+
+  /* ---------- JC's read ---------- */
+  (function lead() {
+    var R = D.summary.jc_read_D_test, Q = D.questions;
+    var L = { send: "I'd send it", missed: "Missed the fix", wrong_fact: "Wrong fact", wrong_fix: "Wrong fix", cant: "Can't judge" };
+    var order = ["wrong_fix", "wrong_fact", "missed", "send", "cant"], ids = Object.keys(R).sort(function (a, b) { return order.indexOf(R[a].choice) - order.indexOf(R[b].choice); });
+    var h = "<thead><tr><th>Question</th><th>My call</th><th>Why</th></tr></thead><tbody>";
+    ids.forEach(function (i) {
+      var q = Q[i] || { title: "#" + i, url: "#" }, c = R[i].choice, inc = c === "wrong_fix" || c === "wrong_fact";
+      h += '<tr><td><a href="' + esc(q.url) + '" target="_blank" rel="noopener">' + esc(q.title) + '</a><span class="sub">#' + i + "</span></td><td" + (inc ? ' class="cw"' : "") + ">" + L[c] + (inc ? '<span class="sub">trust incident</span>' : "") + "</td><td>" + esc(R[i].note || "—") + "</td></tr>";
+    });
+    document.getElementById("lead-t").innerHTML = h + "</tbody>";
+  })();
+
+  /* ---------- docs gap ---------- */
+  (function gaps() {
+    var G = D.docsgap, Q = D.questions, order = ["n8n_docs", "general_tech", "undocumented_n8n", "bug_or_release", "account_access"];
+    var h = '<thead><tr><th>Where the fix lived</th><th class="n">Practice</th><th class="n">Test</th><th class="n">Holdout</th><th class="n">All 240</th></tr></thead><tbody>';
+    order.forEach(function (c) { var r = G.table[c]; h += "<tr><td>" + r.label + (c === "undocumented_n8n" || c === "bug_or_release" || c === "account_access" ? '<span class="sub">needs something the docs don\'t have</span>' : "") + '</td><td class="n">' + r.Practice + '</td><td class="n">' + r.Test + '</td><td class="n">' + r.Holdout + '</td><td class="n"><b>' + r.all + "</b></td></tr>"; });
+    document.getElementById("gap-t").innerHTML = h + "</tbody>";
+    var box = document.getElementById("gap-groups");
+    function themeEl(t, verb) {
+      var d = el("details", { "class": "theme" });
+      d.innerHTML = '<summary><span class="t">' + esc(t.title) + '</span><span class="c">' + t.ids.length + " question" + (t.ids.length > 1 ? "s" : "") + '</span><span class="s"><b>' + verb + ":</b> " + esc(t.suggestion) + "</span></summary>";
+      var ul = el("ul");
+      t.ids.forEach(function (i) { var q = Q[i]; if (!q) return; ul.appendChild(el("li", null, '<a href="' + esc(q.url) + '" target="_blank" rel="noopener">' + esc(q.title) + '</a> <span class="mono muted" style="font-size:12px">' + q.set + " · #" + i + (q.community_has_fix ? " · the forum had this fix earlier" : "") + '</span><span class="fix">' + esc(q.fix) + "</span>")); });
+      d.appendChild(ul); return d;
+    }
+    [["article", "Write"], ["known_issue", "Tell the bot"], ["person", "Route"]].forEach(function (g) {
+      var th = G.themes.filter(function (t) { return t.group === g[0]; }).sort(function (a, b) { return b.ids.length - a.ids.length; });
+      var n = th.reduce(function (a, t) { return a + t.ids.length; }, 0), wrap = el("div", { "class": "stack" });
+      wrap.appendChild(el("div", { "class": "grp-title" }, "<h3 style=\"font-size:var(--s2)\">" + esc(G.groups[g[0]].title) + '</h3><span class="mono">' + n + "</span>"));
+      wrap.appendChild(el("p", { "class": "read" }, esc(G.groups[g[0]].lede)));
+      var list = el("div", { "class": "themes" }); th.forEach(function (t) { list.appendChild(themeEl(t, g[1])); }); wrap.appendChild(list); box.appendChild(wrap);
+    });
+    var gw = el("div", { "class": "stack" });
+    gw.appendChild(el("div", { "class": "grp-title" }, '<h3 style="font-size:var(--s2)">Not a docs gap, but the largest theme</h3><span class="mono">' + G.general.ids.length + " of " + G.table.general_tech.all + "</span>"));
+    gw.appendChild(el("p", { "class": "read" }, "General engineering covers these, so a bot may answer them. They are still the largest single theme I tagged: 13 questions on how to make a workflow run exactly once."));
+    var l2 = el("div", { "class": "themes" }); l2.appendChild(themeEl({ title: "Making a workflow run exactly once", ids: G.general.ids, suggestion: G.general.suggestion }, "Write")); gw.appendChild(l2); box.appendChild(gw);
+    box.appendChild(el("p", { "class": "callout" }, "For the " + G.community.checked + " practice and test questions on the n8n-know-how and known-issue side, the forum's own earlier answers (a harvest of 2,739 solved threads, keeping for each question only answers posted before it, about 2,070 per question) held the fix for " + G.community.had_fix + ". Most gaps are new when they reach the forum. Articles and a known-issues feed can close them; a bot fed past answers mostly can't."));
+  })();
+
+  /* ---------- predictions ---------- */
+  (function preds() {
+    var P = [
+      ["Answer key", "The share of test questions that need a person falls to 50–65%", "31%", 0],
+      ["R4", "Under the corrected key, v4 hands off unnecessarily on at least 45 of 67 answerable test questions", "61", 1],
+      ["R5", "v4 fully answers at most 12 of 97 test questions", "6", 1],
+      ["B1", "An outside reviewer lets at least 10 of the 19 right drafts through", "13", 1],
+      ["B2", "It lets at most 3 of the 30 bluffs through", "7", 0],
+      ["B3", "At least one of three outside reviewers passes the practice screen", "none", 0],
+      ["B4", "MiMo lets 4 to 12 of the 30 bluffs through", "7", 1],
+      ["D1", "Sol's drafts fully answer 21 to 31 of 97", "24", 1],
+      ["D2", "Sol's drafts are confidently wrong on 15 to 30 of 97", "10 (better)", 0],
+      ["D4a", "Sol's practice drafts fully answer 11 to 17 of 43", "17", 1],
+      ["D4b", "Sol's practice drafts are confidently wrong on 5 to 11 of 43", "4 (better)", 0],
+      ["F0-1", "The rewritten prompt fully answers 15 to 22 of 97", "24 (better)", 0],
+      ["F0-2", "It is confidently wrong on 18 to 28 of 97", "33 (worse)", 0],
+      ["F1", "Forum answers add at least 5 fully answered questions", "+3", 0],
+      ["F2", "F fails the practice screen", "12 of 43", 1],
+      ["DF1", "DF fully answers 13 to 19 of 43 practice questions", "17", 1],
+      ["DF2", "DF is confidently wrong on 1 to 4 of 43", "3", 1],
+      ["G1", "Friendlier handoffs pass the practice screen", "5 of 43", 0],
+      ["H1", "Holdout: fully answered 3 to 10 of 100", "5", 1],
+      ["H2", "Holdout: confidently wrong 0 to 4 of 100", "4", 1],
+      ["H3", "Holdout: the trust budget is met", "4 of 100", 0],
+      ["H4", "Holdout: unnecessary handoffs 80 to 95 per 100 answerable", "87", 1]
+    ];
+    var h = '<thead><tr><th>#</th><th>Prediction</th><th class="n">Result</th><th></th></tr></thead><tbody>';
+    P.forEach(function (p) { h += '<tr><td class="mono" style="white-space:nowrap">' + p[0] + "</td><td>" + p[1] + '</td><td class="n">' + p[2] + "</td><td>" + (p[3] ? '<span class="hit">HIT</span>' : '<span class="miss">MISSED</span>') + "</td></tr>"; });
+    document.getElementById("pred-t").innerHTML = h + "</tbody>";
+  })();
+
+  /* ---------- reply explorer ---------- */
+  var SETARMS = { holdout: ["A"], test: ["A", "A_draft", "v1", "B", "D", "F0", "F"], practice: ["A", "A_draft", "v1", "B", "D", "DF", "F0", "F", "G"] };
+  var cache = {}, st = { set: "holdout", arm: "A", out: "all", q: "", shown: 40, open: null };
+  var armSel = document.getElementById("arm-sel"), outSel = document.getElementById("out-sel"), search = document.getElementById("q-search");
+  var list = document.getElementById("qlist"), more = document.getElementById("more"), count = document.getElementById("q-count");
+  outSel.innerHTML = '<option value="all">All outcomes</option>' + OUT.map(function (o) { return '<option value="' + o + '">' + OUTL[o] + "</option>"; }).join("");
+  function fillArms() { armSel.innerHTML = SETARMS[st.set].map(function (a) { return '<option value="' + a + '">' + esc(ARM[a].n) + "</option>"; }).join(""); armSel.value = st.arm; }
+  function load(set) {
+    if (cache[set]) return Promise.resolve(cache[set]);
+    return fetch("data/replies-" + set + ".json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) { cache[set] = d; return d; });
+  }
+  function kindLine(arm, set, r) {
+    var k = r.kind;
+    if (arm === "A" && set === "holdout" && k === "draft") k = "passed";
+    if (k === "passed") return "Its reviewer passed the draft; this reply went out.";
+    if (/handoff$/.test(k) && k !== "handoff_failure" && k !== "safe_handoff") return "Its reviewer blocked the draft; this handoff went out instead.";
+    if (k === "system_failure" || k === "safe_handoff" || k === "handoff_failure") return "A model call failed; the fixed safe handoff went out.";
+    return "";
+  }
+  function fmt(t) { return esc(t).replace(/`([^`\n]+)`/g, "<code>$1</code>").replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>"); }
+  var SETTLE = { agree: "Both graders agreed.", two_of_three: "The graders split; the tie-breaker decided (2 of 3).", unresolved: "All three graders disagreed. Counted by the rule fixed in advance." };
+  function renderReply(box, d, q, arm) {
+    var r = d.replies[arm][q.id];
+    if (!r) { box.innerHTML = '<p class="muted">No reply stored for this version.</p>'; return; }
+    var h = "";
+    var kl = kindLine(arm, st.set, r); if (kl) h += '<p class="settle">' + kl + "</p>";
+    h += '<div class="reply">' + fmt(r.text) + "</div>";
+    if (r.review && /handoff/.test(r.kind)) {
+      h += '<p style="font-size:14.5px"><span class="eyebrow" style="font-size:11px">Reviewer\'s reason</span><br>' + esc(r.review) + "</p>";
+      var dr = st.set === "holdout" ? { text: r.draft, outcome: null } : (d.replies.A_draft && d.replies.A_draft[q.id]);
+      if (dr && dr.text && arm === "A") h += '<details><summary class="linkish" style="cursor:pointer;font:600 14px var(--font-display);color:var(--accent)">Show the blocked draft</summary><p class="settle" style="margin-top:8px">' + (dr.outcome ? "Graded as: " + OUTL[dr.outcome] : "Drafts on the holdout weren't graded.") + '</p><div class="reply">' + fmt(dr.text) + "</div></details>";
+    }
+    h += '<div class="stack" style="gap:8px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' + chip(r.outcome) + (r.severity ? '<span class="settle">' + ({ S1_wrong_fact: "wrong fact", S2_wrong_fix: "wrong fix", S3_unsafe: "unsafe", disputed: "disputed" }[r.severity] || "") + "</span>" : "") + '<span class="settle">' + (SETTLE[r.status] || "") + "</span></div>";
+    h += '<div class="grades">';
+    (r.grades || []).forEach(function (g) { h += '<div class="grade"><div class="who">' + esc(g.by) + chip(g.outcome) + "</div><p>" + (g.why ? esc(g.why) : '<span class="muted">No reasoning given.</span>') + "</p></div>"; });
+    box.innerHTML = h + "</div></div>";
+  }
+  function card(d, q) {
+    var r = d.replies[st.arm][q.id] || {};
+    var wrap = el("div", { "class": "q", id: "q-" + q.id });
+    var head = el("button", { "class": "qhead", type: "button", "aria-expanded": "false" }, chip(r.outcome) + '<span class="qt">' + esc(q.title) + '</span><span class="qid">#' + q.id + "</span>");
+    var body = el("div", { "class": "qbody", hidden: "" });
+    head.addEventListener("click", function () { var open = body.hidden; body.hidden = !open; head.setAttribute("aria-expanded", String(open)); if (open && !body.firstChild) fillBody(body, d, q); });
+    wrap.appendChild(head); wrap.appendChild(body); return wrap;
+  }
+  function fillBody(body, d, q) {
+    var kv = el("dl", { "class": "kv" }, '<dt>THE FIX THAT WORKED</dt><dd>' + esc(q.fix || "—") + '</dd><dt>WHERE IT LIVED</dt><dd>' + CAT[q.category] + (q.basis && /JC/.test(q.basis) ? ' <span class="settle">(my reading settled the label)</span>' : "") + '</dd><dt>THREAD</dt><dd><a href="' + esc(q.url) + '" target="_blank" rel="noopener">Read it on the n8n forum</a> <span class="settle">' + esc(q.date) + (q.hidden_history ? " · edit history hidden by moderators" : "") + "</span></dd>");
+    body.appendChild(kv);
+    var arms = SETARMS[st.set], tabs = el("div", { "class": "tabs", role: "tablist", "aria-label": "Versions" }), box = el("div", { "class": "stack" });
+    arms.forEach(function (a) {
+      var r = d.replies[a][q.id] || {};
+      var b = el("button", { type: "button", role: "tab", "aria-selected": String(a === st.arm) }, '<i style="background:' + (r.outcome ? css(OVAR[r.outcome]) : css("--rule")) + '"></i>' + esc(ARM[a].n));
+      b.addEventListener("click", function () { [].forEach.call(tabs.children, function (x) { x.setAttribute("aria-selected", "false"); }); b.setAttribute("aria-selected", "true"); renderReply(box, d, q, a); });
+      tabs.appendChild(b);
+    });
+    if (arms.length > 1) body.appendChild(tabs);
+    body.appendChild(box); renderReply(box, d, q, st.arm);
+  }
+  function render() {
+    list.innerHTML = '<div class="loading">Loading…</div>';
+    load(st.set).then(function (d) {
+      var needle = st.q.trim().toLowerCase();
+      var qs = d.questions.filter(function (q) {
+        var r = d.replies[st.arm][q.id] || {};
+        return (st.out === "all" || r.outcome === st.out) && (!needle || q.title.toLowerCase().indexOf(needle) >= 0 || q.id === needle.replace("#", ""));
+      });
+      if (st.open) { qs.sort(function (a, b) { return (b.id === st.open) - (a.id === st.open); }); }
+      list.innerHTML = "";
+      count.textContent = "Showing " + Math.min(st.shown, qs.length) + " of " + qs.length + " questions · " + ARM[st.arm].n;
+      if (!qs.length) list.appendChild(el("p", { "class": "muted" }, "No questions match. Clear the search or pick another outcome."));
+      qs.slice(0, st.shown).forEach(function (q) { list.appendChild(card(d, q)); });
+      more.hidden = qs.length <= st.shown;
+      if (st.open) {
+        var c = document.getElementById("q-" + st.open);
+        if (c) { c.querySelector(".qhead").click(); c.scrollIntoView({ block: "start", behavior: "smooth" }); }
+        st.open = null;
+      }
+    }).catch(function () { list.innerHTML = '<p class="muted">The reply data didn\'t load. Reload the page to try again.</p>'; });
+  }
+  function setSet(s) {
+    st.set = s; if (SETARMS[s].indexOf(st.arm) < 0) st.arm = "A"; st.shown = 40;
+    [].forEach.call(document.querySelectorAll("#set-seg button"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.set === s)); });
+    fillArms(); render();
+  }
+  [].forEach.call(document.querySelectorAll("#set-seg button"), function (b) { b.addEventListener("click", function () { setSet(b.dataset.set); }); });
+  armSel.addEventListener("change", function () { st.arm = armSel.value; st.shown = 40; render(); });
+  outSel.addEventListener("change", function () { st.out = outSel.value; st.shown = 40; render(); });
+  var tmr; search.addEventListener("input", function () { clearTimeout(tmr); tmr = setTimeout(function () { st.q = search.value; st.shown = 40; render(); }, 180); });
+  more.addEventListener("click", function () { st.shown += 40; render(); });
+  [].forEach.call(document.querySelectorAll("[data-open]"), function (b) {
+    b.addEventListener("click", function () {
+      var p = b.getAttribute("data-open").split(":");
+      st.out = "all"; outSel.value = "all"; st.q = ""; search.value = ""; st.arm = "A"; st.open = p[1]; setSet(p[0]);
+      document.getElementById("replies").scrollIntoView({ block: "start" });
+    });
+  });
+  fillArms(); render();
+})();
+</script>

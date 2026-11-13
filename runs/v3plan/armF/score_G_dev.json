@@ -1,0 +1,38 @@
+{
+ "arm": {
+  "n": 43,
+  "pending": 0,
+  "resolved": 3,
+  "partial": 0,
+  "right_question": 0,
+  "correct_handoff": 9,
+  "unnecessary_handoff": 25,
+  "wrong_hedged": 1,
+  "no_progress": 0,
+  "confidently_wrong": 5,
+  "unresolved": 1,
+  "kinds": {
+   "passed": 7,
+   "g_handoff": 36
+  },
+  "trust_range_95_per_100": [
+   3.9,
+   25.1
+  ],
+  "answerable": 33,
+  "unnecessary_per_100_answerable": 75.8,
+  "spend_usd": 0.8598
+ },
+ "name": "G",
+ "split": "dev",
+ "settlement": {
+  "agree": 34,
+  "two_of_three": 8,
+  "unresolved": 1
+ },
+ "severity_split": {
+  "S1_wrong_fact": 4,
+  "disputed": 1
+ },
+ "screen_passed": false
+}

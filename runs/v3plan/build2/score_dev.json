@@ -1,0 +1,195 @@
+{
+ "split": "dev",
+ "answerable": 33,
+ "arms": {
+  "v4": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 3,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 9,
+   "unnecessary_handoff": 29,
+   "wrong_hedged": 2,
+   "no_progress": 0,
+   "confidently_wrong": 0,
+   "unresolved": 0,
+   "kinds": {
+    "passed": 7,
+    "reused_v4_handoff": 36
+   },
+   "final_failure_rate": 0.0,
+   "unnecessary_per_100_answerable": 87.9,
+   "trust_range_95_per_100": [
+    0.0,
+    8.2
+   ],
+   "drafts_let_through": {
+    "resolved": 3,
+    "correct_handoff": 2,
+    "wrong_hedged": 1,
+    "unnecessary_handoff": 1
+   },
+   "drafts_blocked": {
+    "confidently_wrong": 11,
+    "wrong_hedged": 3,
+    "partial": 7,
+    "unnecessary_handoff": 6,
+    "resolved": 7,
+    "correct_handoff": 2
+   }
+  },
+  "xiaomi/mimo-v2.6-pro": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 7,
+   "partial": 5,
+   "right_question": 0,
+   "correct_handoff": 6,
+   "unnecessary_handoff": 18,
+   "wrong_hedged": 3,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "unresolved": 2,
+   "kinds": {
+    "passed": 27,
+    "reused_v4_handoff": 16
+   },
+   "final_failure_rate": 0.0,
+   "unnecessary_per_100_answerable": 54.5,
+   "trust_range_95_per_100": [
+    2.6,
+    22.1
+   ],
+   "drafts_let_through": {
+    "resolved": 7,
+    "correct_handoff": 3,
+    "confidently_wrong": 4,
+    "partial": 5,
+    "unnecessary_handoff": 6,
+    "wrong_hedged": 2
+   },
+   "drafts_blocked": {
+    "wrong_hedged": 2,
+    "confidently_wrong": 7,
+    "resolved": 3,
+    "unnecessary_handoff": 1,
+    "correct_handoff": 1,
+    "partial": 2
+   },
+   "cost_usd": 0.1121,
+   "cents_per_question": 0.261,
+   "longest_reply_tokens": 2667,
+   "routes": {
+    "api": 43
+   },
+   "hosts": {
+    "Xiaomi": 43
+   },
+   "attempt_failures": 0,
+   "passes_screen": false
+  },
+  "z-ai/glm-5.3": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 9,
+   "partial": 5,
+   "right_question": 0,
+   "correct_handoff": 4,
+   "unnecessary_handoff": 12,
+   "wrong_hedged": 5,
+   "no_progress": 0,
+   "confidently_wrong": 8,
+   "unresolved": 2,
+   "kinds": {
+    "passed": 36,
+    "reused_v4_handoff": 7
+   },
+   "final_failure_rate": 0.0,
+   "unnecessary_per_100_answerable": 36.4,
+   "trust_range_95_per_100": [
+    8.4,
+    33.4
+   ],
+   "drafts_let_through": {
+    "resolved": 9,
+    "correct_handoff": 3,
+    "confidently_wrong": 8,
+    "wrong_hedged": 4,
+    "partial": 5,
+    "unnecessary_handoff": 7
+   },
+   "drafts_blocked": {
+    "partial": 2,
+    "confidently_wrong": 3,
+    "correct_handoff": 1,
+    "resolved": 1
+   },
+   "cost_usd": 1.8627,
+   "cents_per_question": 4.332,
+   "longest_reply_tokens": 23734,
+   "routes": {
+    "api": 43
+   },
+   "hosts": {
+    "Parasail": 43
+   },
+   "attempt_failures": 12,
+   "passes_screen": false
+  },
+  "moonshotai/kimi-k3": {
+   "n": 43,
+   "pending": 0,
+   "resolved": 9,
+   "partial": 7,
+   "right_question": 0,
+   "correct_handoff": 5,
+   "unnecessary_handoff": 9,
+   "wrong_hedged": 4,
+   "no_progress": 0,
+   "confidently_wrong": 9,
+   "unresolved": 2,
+   "kinds": {
+    "passed": 38,
+    "reused_v4_handoff": 5
+   },
+   "final_failure_rate": 0.0,
+   "unnecessary_per_100_answerable": 27.3,
+   "trust_range_95_per_100": [
+    10.0,
+    36.0
+   ],
+   "drafts_let_through": {
+    "resolved": 9,
+    "correct_handoff": 3,
+    "confidently_wrong": 9,
+    "partial": 7,
+    "unnecessary_handoff": 7,
+    "wrong_hedged": 3
+   },
+   "drafts_blocked": {
+    "wrong_hedged": 1,
+    "confidently_wrong": 2,
+    "correct_handoff": 1,
+    "resolved": 1
+   },
+   "cost_usd": 1.6796,
+   "cents_per_question": 3.906,
+   "longest_reply_tokens": 8196,
+   "routes": {
+    "api": 43
+   },
+   "hosts": {
+    "Moonshot AI": 43
+   },
+   "attempt_failures": 0,
+   "passes_screen": false
+  }
+ },
+ "new_replies": 0,
+ "new_settlement": {},
+ "grading_cost_usd": 0.0,
+ "ranked_passing": [],
+ "chosen": null,
+ "complete": true
+}

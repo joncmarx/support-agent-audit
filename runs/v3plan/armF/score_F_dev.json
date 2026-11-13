@@ -1,0 +1,38 @@
+{
+ "arm": {
+  "n": 43,
+  "pending": 0,
+  "resolved": 12,
+  "partial": 7,
+  "right_question": 0,
+  "correct_handoff": 2,
+  "unnecessary_handoff": 4,
+  "wrong_hedged": 4,
+  "no_progress": 2,
+  "confidently_wrong": 12,
+  "unresolved": 3,
+  "kinds": {
+   "draft": 43
+  },
+  "trust_range_95_per_100": [
+   15.3,
+   43.7
+  ],
+  "answerable": 34,
+  "unnecessary_per_100_answerable": 11.8,
+  "spend_usd": 1.5009
+ },
+ "name": "F",
+ "split": "dev",
+ "settlement": {
+  "two_of_three": 17,
+  "agree": 23,
+  "unresolved": 3
+ },
+ "severity_split": {
+  "S2_wrong_fix": 5,
+  "S1_wrong_fact": 6,
+  "disputed": 1
+ },
+ "screen_passed": false
+}

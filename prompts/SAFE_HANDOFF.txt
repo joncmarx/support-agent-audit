@@ -1,0 +1,5 @@
+A person needs to look deeper into this.
+I want to make sure you get the right answer the first time rather than going back and forth.
+To make this as efficient as possible, please provide me with the version of n8n you are using, whether you're on Cloud or self-hosted, and any evidence you can provide such as the execution log, the exact error, or screenshots.
+You should post that info inside the n8n forum thread for an answer from the community at community.n8n.io.
+Please set the current issue aside for now until the community gets back to you with the answer.

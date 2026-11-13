@@ -1,0 +1,222 @@
+{
+ "note": "Theme assignment for the docs-gap report (Build 4, 2026-10-21). Written by Claude from the labelers' one-line fix summaries and categories; no model run. Every question on the human side of the final labels (practice, test and holdout) appears in exactly one theme; audit/docsgap.py checks that.",
+ "groups": {
+  "article": {
+   "title": "Articles n8n could write",
+   "category": "undocumented_n8n",
+   "lede": "The fix is n8n-specific know-how that the docs (pinned commit) don't contain. A forum member knew it. An article would let a docs bot answer next time."
+  },
+  "known_issue": {
+   "title": "Known issues a bot should be told about",
+   "category": "bug_or_release",
+   "lede": "The fix is \"it's a bug in this version\" plus a workaround or the version that fixes it. Docs can't say that in time; a known-issues feed can."
+  },
+  "person": {
+   "title": "Questions that always need a person",
+   "category": "account_access",
+   "lede": "Only n8n staff can act: a badge, an account, a review queue, a quote. The bot's job is one right route, fast."
+  }
+ },
+ "themes": [
+  {
+   "group": "article",
+   "title": "AI Agent, memory and vector nodes",
+   "suggestion": "One troubleshooting page for the AI Agent cluster: how memory session keys resolve when tools run, why binary data can't cross the agent-to-tool boundary (and the reference pattern instead), setting embedding dimensions, routing a Model Selector on $error, the fixed-vs-expression Type field in Message a Model, and what Evaluate All needs.",
+   "ids": [
+    "297496",
+    "261291",
+    "293231",
+    "306497",
+    "273736",
+    "296659",
+    "299625"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Public API, CLI and credentials by API",
+   "suggestion": "An API cookbook: the list endpoint omits description (use Get), description is top-level on PUT, Custom Auth credentials take json as a string, which API key can act on which project in 2.x, bootstrapping an instance for CI, what publish:workflow's warning means, and how credential names auto-number.",
+   "ids": [
+    "266219",
+    "309760",
+    "298502",
+    "294401",
+    "274894",
+    "273525",
+    "296438"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "n8n Academy courses",
+   "suggestion": "A course FAQ: which courses are retired and what replaced them, how the progress check reads your unique ID, what passing Level 2 requires, and the Loop Over Items 'done' output. Together with the two badge requests under 'always need a person', the course accounts for 7 questions.",
+   "ids": [
+    "291081",
+    "311932",
+    "279823",
+    "250592",
+    "295581"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Code node and expressions in 2.x",
+   "suggestion": "A 2.x Code node page: fetch isn't in the sandbox (use this.helpers.httpRequest), $('Node') references can hang the task runner, typeVersion 2 is needed for Python when creating nodes by API, plus two expression traps ($('...').first() inside pagination, String vs Array in Edit Fields).",
+   "ids": [
+    "306079",
+    "288365",
+    "275504",
+    "309257",
+    "273323"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Self-hosting, versions and queue mode",
+   "suggestion": "A self-hosting checklist: workers must run the main instance's image and config, which version introduced which feature (Chat Hub needs 2.1.0), repairing missing owner scope rows, debugging a schedule that leaves no execution, and the browser extension's localhost requirement.",
+   "ids": [
+    "297754",
+    "271048",
+    "312214",
+    "297176",
+    "309050"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Node behavior: branches, HTTP methods, sessions",
+   "suggestion": "A 'how execution really flows' page: branches run in sequence (batch items to run requests in parallel), an extra incoming connection runs a node twice, null values break the LDAP node, the HTTP Request node drops the body on REPORT, and all items of one node execution share one database session.",
+   "ids": [
+    "306794",
+    "254722",
+    "287340",
+    "268997",
+    "310720"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Triggers and webhook registration",
+   "suggestion": "A trigger registration page: re-activating a workflow re-registers its webhook (Meta subscriptions go stale), pasted trigger nodes share a webhook ID, two Lead Ads forms need the same Facebook app, and a trigger with an empty credential fails to publish.",
+   "ids": [
+    "290067",
+    "299450",
+    "254693",
+    "270419"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Binary data and email attachments",
+   "suggestion": "An attachments recipe: carry binary from the trigger to the send node, give each binary property a unique name to send several in one email, and fetch large attachments one at a time to stay inside Cloud memory.",
+   "ids": [
+    "309749",
+    "255738",
+    "296744"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Community, creators and accounts",
+   "suggestion": "Short answers that belong in a creators and community FAQ: a creator page goes live after templates are approved, how verification treats a rebuilt node with no runtime dependencies, personal email is fine for sign-up, and what a good forum question includes.",
+   "ids": [
+    "274571",
+    "300429",
+    "292397",
+    "310250"
+   ]
+  },
+  {
+   "group": "article",
+   "title": "Plans, limits and migration",
+   "suggestion": "Two facts customers look for before buying: current Cloud execution limits (the old 5-minute Starter limit is gone) and that there's no Zapier importer, with a staged migration plan instead.",
+   "ids": [
+    "276736",
+    "307984"
+   ]
+  },
+  {
+   "group": "known_issue",
+   "title": "Version regressions with a known fix or safe version",
+   "suggestion": "Give the bot each release's fixed-issue notes with version numbers, so it can say \"2.15.0 has this bug; 2.17 fixes it\" instead of guessing.",
+   "ids": [
+    "286540",
+    "302503",
+    "306956",
+    "268806",
+    "271805",
+    "299774"
+   ]
+  },
+  {
+   "group": "known_issue",
+   "title": "Node bugs with a workaround",
+   "suggestion": "Give the bot the open, confirmed node bugs with their workaround (use the HTTP Request node, pin the node version, turn off Always Output Data), so the customer gets the workaround and the route in one reply.",
+   "ids": [
+    "298570",
+    "274129",
+    "273951",
+    "297687",
+    "264833",
+    "307158",
+    "264152",
+    "298353",
+    "304343"
+   ]
+  },
+  {
+   "group": "person",
+   "title": "n8n Academy badges",
+   "suggestion": "Route: the course admin, with the unique ID and community username.",
+   "ids": [
+    "257991",
+    "264436"
+   ]
+  },
+  {
+   "group": "person",
+   "title": "Creator Hub and community-node review",
+   "suggestion": "Route: creators@n8n.io for Creator Hub account changes; help@n8n.io for the review queue.",
+   "ids": [
+    "299944",
+    "290662"
+   ]
+  },
+  {
+   "group": "person",
+   "title": "Cloud workspace down",
+   "suggestion": "Route: a support ticket with the workspace ID and when the loop started; say plainly that only n8n can repair it.",
+   "ids": [
+    "258295"
+   ]
+  },
+  {
+   "group": "person",
+   "title": "Pricing and forum structure",
+   "suggestion": "Route: sales for an enterprise quote; the Feedback category for a new forum section.",
+   "ids": [
+    "297408",
+    "278295"
+   ]
+  }
+ ],
+ "general": {
+  "title": "Not a docs gap, but the largest theme tagged: making a workflow run exactly once",
+  "suggestion": "General engineering covers these (idempotency keys, unique constraints, row locks, ordering). A single n8n patterns page showing each one with n8n nodes would still save the forum a lot of answers.",
+  "ids": [
+   "310338",
+   "295919",
+   "306976",
+   "310057",
+   "271354",
+   "307866",
+   "293072",
+   "294568",
+   "296374",
+   "313213",
+   "297603",
+   "309667",
+   "297742"
+  ]
+ }
+}

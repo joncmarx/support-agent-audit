@@ -1,0 +1,101 @@
+{
+ "split": "test",
+ "answerable": 67,
+ "arms": {
+  "v4": {
+   "n": 97,
+   "pending": 0,
+   "resolved": 6,
+   "partial": 0,
+   "right_question": 0,
+   "correct_handoff": 28,
+   "unnecessary_handoff": 61,
+   "wrong_hedged": 0,
+   "no_progress": 0,
+   "confidently_wrong": 2,
+   "unresolved": 1,
+   "kinds": {
+    "reused_v4_handoff": 87,
+    "passed": 10
+   },
+   "final_failure_rate": 0.0,
+   "unnecessary_per_100_answerable": 91.0,
+   "trust_range_95_per_100": [
+    0.3,
+    7.3
+   ],
+   "drafts_let_through": {
+    "resolved": 6,
+    "correct_handoff": 3,
+    "confidently_wrong": 1
+   },
+   "drafts_blocked": {
+    "unnecessary_handoff": 12,
+    "resolved": 13,
+    "no_progress": 3,
+    "confidently_wrong": 29,
+    "wrong_hedged": 9,
+    "correct_handoff": 11,
+    "partial": 9,
+    "right_question": 1
+   }
+  },
+  "xiaomi/mimo-v2.6-pro": {
+   "n": 97,
+   "pending": 0,
+   "resolved": 13,
+   "partial": 5,
+   "right_question": 1,
+   "correct_handoff": 24,
+   "unnecessary_handoff": 41,
+   "wrong_hedged": 2,
+   "no_progress": 3,
+   "confidently_wrong": 8,
+   "unresolved": 7,
+   "kinds": {
+    "passed": 50,
+    "reused_v4_handoff": 46,
+    "new_handoff": 1
+   },
+   "final_failure_rate": 0.0,
+   "unnecessary_per_100_answerable": 61.2,
+   "trust_range_95_per_100": [
+    3.6,
+    15.6
+   ],
+   "drafts_let_through": {
+    "unnecessary_handoff": 8,
+    "no_progress": 3,
+    "resolved": 13,
+    "confidently_wrong": 7,
+    "correct_handoff": 12,
+    "partial": 5,
+    "wrong_hedged": 1,
+    "right_question": 1
+   },
+   "drafts_blocked": {
+    "resolved": 6,
+    "confidently_wrong": 23,
+    "wrong_hedged": 8,
+    "correct_handoff": 2,
+    "unnecessary_handoff": 4,
+    "partial": 4
+   },
+   "cost_usd": 0.3187,
+   "cents_per_question": 0.329,
+   "longest_reply_tokens": 7110,
+   "routes": {
+    "api": 97
+   },
+   "hosts": {
+    "Xiaomi": 97
+   },
+   "attempt_failures": 0
+  }
+ },
+ "new_replies": 1,
+ "new_settlement": {
+  "agree": 1
+ },
+ "grading_cost_usd": 0.0185
+}

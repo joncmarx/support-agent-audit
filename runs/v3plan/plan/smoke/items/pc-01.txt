@@ -1,0 +1,228 @@
+## The customer's question
+<<<
+Title: Node to consolidate incoming text messages into a single batch
+
+Hi everyone
+
+I’m stuck and could really use your help
+
+In a typical WhatsApp conversation, we often receive 2–3 messages in a row that are all part of the same context. Instead of sending each line individually in the Gmail output, I’d like to group them together into a single, consolidated message before sending
+
+Does anyone have advice on which node I should use for this? Ideally, the node would be able to wait for about 90 seconds, store incoming messages during that time, and then combine them into one context before passing them to the next node
+
+PS: I hope I’m explaining this clearly I tried to keep it as simple as possible
+>>>
+
+## The reference packet
+Accepted answer from the forum (it solved the problem for the asker):
+<<<
+@Maxwell45 This is the classic debounce pattern, and there’s no single built-in node that does it, you need a small combo:
+
+Trigger fires on each incoming message → write it to storage Redis, a Data Table, or even Airtable keyed by the sender’s phone number, appending to a running buffer rather than overwriting.
+
+Wait node set to 90 seconds.
+
+After the wait, check a timestamp, if the buffer’s “last updated” time is still within the last ~5 seconds of when this particular execution started waiting, it means no newer message has come in, so this execution is the “last” one and should proceed. If a newer message arrived during the wait, this execution should just stop (another execution will pick up the final flush).
+
+If proceeding: read the full buffer, join the messages into one string, clear the buffer, and pass it downstream to Gmail.
+
+The reason it’s not simpler: every incoming WhatsApp message triggers its own separate execution in n8n (there’s no native “hold and merge” trigger), so you need external state (Redis is ideal, fast, and has a natural TTL for buffer expiry) to coordinate across those parallel executions and make sure only the last one actually sends.
+>>>
+
+Reference note — key step of the fix, as recorded by the labeler: Build a debounce: append each incoming message to external storage (Redis or a Data Table) keyed by sender, use a Wait node for 90 seconds, let only the execution that sees no newer message proceed, then join the buffer into one string, clear it, and send it via Gmail.
+
+Evidence passages from the n8n docs:
+(none)
+
+## The passages this agent had
+[1] Telegram node common issues — Send more than 30 messages per second (https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.telegram/common-issues)
+## Send more than 30 messages per second
+
+The Telegram API has a [limitation](https://core.telegram.org/bots/faq#broadcasting-to-users) of sending only 30 messages per second. Follow these steps to send more than 30 messages:
+
+1. **Loop Over Items node**: Use the [Loop Over Items](../../core-nodes/n8n-nodes-base.splitinbatches.md) node to get at most 30 chat IDs from your database.
+2. **Telegram node**: Connect the Telegram node with the Loop Over Items node. Use the **Expression Editor** to select the Chat IDs from the Loop Over Items node.
+3. **Code node**: Connect the [Code](../../core-nodes/n8n-nodes-base.code/README.md) node with the Telegram node. Use the Code node to wait for a few seconds before fetching the next batch of chat IDs. Connect this node with the Loop Over Items node.
+
+You can also use this [workflow](https://n8n.io/workflows/772).
+
+## Remove the n8n attribution from sent messages
+
+If you're using the node to [send Telegram messages](message-operations.md#send-message), the message automatically gets an n8n attribution appended to the end:
+
+> This message was sent automatically with n8n
+
+To remove this attribution:
+
+1. In the node's **Additional Fields** section, select **Add Field**.
+2. Select **Append n8n attribution**.
+3. Turn the toggle off.
+
+Refer to [Send Message additional fields](message-operations.md#send-message-additional-fields) for more information.
+
+[2] Looping in n8n —  (https://docs.n8n.io/build/flow-logic/loop)
+Looping is useful when you want to process multiple items or perform an action repeatedly, such as sending a message to every contact in your address book. n8n handles this repetitive processing automatically, meaning you don't need to specifically build loops into your workflows. There are [some nodes](#node-exceptions) where this isn't true.
+
+Looping is one part of n8n's [flow logic](./), alongside [splitting](split-with-conditionals.md) and [merging](merge-data.md) data streams, and [waiting](wait.md) between executions.
+
+## Using loops in n8n
+
+n8n nodes take any number of items as input, process these items, and output the results. You can think of each item as a single data point, or a single row in the output table of a node.
+
+![The Customer Datastore node output](../.gitbook/assets/customer_datastore_node.png)
+
+Nodes usually run once for each item. For example, if you wanted to send the name and notes of the customers in the Customer Datastore node as a message on Slack, you would:
+
+1. Connect the Slack node to the Customer Datastore node.
+2. Configure the parameters.
+3. Execute the node.
+
+You would receive five messages: one for each item.
+
+This is how you can process multiple items without having to explicitly connect nodes in a loop.
+
+[3] Gmail node Message Operations documentation — Get Many messages filters (https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.gmail/message-operations)
+* **Include Spam and Trash**: Select whether the node should get messages in the Spam and Trash folders (turned on) or not (turned off).
+* **Label Names or IDs**: Only return messages with the selected labels added to them. Select the Label names you want to apply or enter an expression to specify IDs. The dropdown populates based on the **Credential** you selected.
+* **Search**: Enter Gmail search refine filters, like `from:`, to filter the messages returned. Refer to [Refine searches in Gmail](https://support.google.com/mail/answer/7190?hl=en) for more information.
+* **Read Status**: Choose whether to receive **Unread and read emails**, **Unread emails only** (default), or **Read emails only**.
+* **Received After**: Return only those emails received after the specified date and time. Use the date picker to select the day and time or enter an expression to set a date as a string in ISO format or a timestamp in milliseconds. Refer to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) for more information on formatting the string.
+* **Received Before**: Return only those emails received before the specified date and time. Use the date picker to select the day and time or enter an expression to set a date as a string in ISO format or a timestamp in milliseconds. Refer to [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) for more information on formatting the string.
+* **Sender**: Enter an email or a part of a sender name to return messages from only that sender.
+
+Refer to the [Gmail API Method: users.messages.list](https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list) documentation for more information.
+
+[4] Canvas Groups —  (https://docs.n8n.io/build/understand-workflows/workflow-components/canvas-groups)
+Note: 
+**Feature availability**
+
+Canvas Groups rolled out gradually from n8n 2.28.0 and are available on all instances from n8n 2.31.0.
+
+Canvas Groups let you organize related nodes into a single named group on the canvas. Group the nodes that handle one part of a workflow, name it, and collapse it when you want a cleaner view. A Canvas Group saves with the workflow, so anyone who opens it sees the same structure. You can collapse a Canvas Group for a cleaner view, which is a personal preference saved in your browser. And you can also give a Canvas Group a description, so anyone reading the workflow can see what that part does at a glance.
+
+![A workflow with expanded and collapsed Canvas Groups, some with descriptions](../../.gitbook/assets/canvas-groups-overview.png)
+
+## Create a Canvas Group
+
+1. Select the nodes you want to group. Drag a selection box around them, or hold `Ctrl/Cmd` and click each node.
+2. Select the **Group nodes** icon  in the toolbar above the selection, select **Group nodes** in the selection's right-click menu, or press `Ctrl/Cmd` + `G`.
+3. n8n creates the Canvas Group and highlights the name field so you can type a name straight away.
+
+You can only group a selection when it forms a valid Canvas Group. See [What you can group](#what-you-can-group) for the rules.
+
+[5] Telegram node Message operations documentation — Send and Wait for Response (https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.telegram/message-operations)
+## Send and Wait for Response
+
+Use this operation to send a message to the chat using the Bot API [`sendMessage`](https://core.telegram.org/bots/api#sendmessage) method and pause the workflow execution until the user confirms the operation.
+
+Enter these parameters:
+
+* **Credential to connect with**: Create or select an existing [Telegram credential](../../credentials/telegram.md).
+* **Resource**: Select **Message**.
+* **Operation**: Select **Send and Wait for Response**.
+* **Chat ID**: Enter the Chat ID or username of the channel you wish to send the message to in the format `@channelusername`.
+  * To feed a Chat ID directly into this node, use the [Telegram Trigger](../../trigger-nodes/n8n-nodes-base.telegramtrigger/README.md) node. Refer to [Common Issues | Get the Chat ID](common-issues.md#get-the-chat-id) for more information.
+* **Message**: Enter the text to send.
+* **Response Type**: The approval or response type to use:
+  * **Approval**: Users can approve or disapprove from within the message.
+  * **Free Text**: Users can submit a response with a form.
+  * **Custom Form**: Users can submit a response with a custom form.
+
+Refer to Telegram's Bot API [`sendMessage`](https://core.telegram.org/bots/api#sendmessage) documentation for more information.
+
+Note: 
+**Send Message limits**
+
+Telegram limits the number of messages you can send to 30 per second. If you expect to hit this limit, refer to [Send more than 30 messages per second](common-issues.md#send-more-than-30-messages-per-second) for a suggested workaround.
+
+[6] Changelog — Organize large workflows with Canvas Groups (https://docs.n8n.io/changelog)
+## Organize large workflows with Canvas Groups
+
+**Released:** 2026-06-23 in [n8n 2.28](release-notes.md#n8n228)
+
+You can now organize related nodes into a single named Canvas Group and collapse it for a cleaner view. Group the nodes that handle one part of a workflow, give the group a name, and collapse it to hide the detail until you need it. A large workflow that used to sprawl across the canvas shrinks to a handful of labeled blocks you can read at a glance, so it's faster to find your way around a workflow a teammate built or one you haven't opened in months.
+
+To create a group, select a connected run of nodes by dragging a box around them or holding `Ctrl/Cmd` and clicking each one, then press `Ctrl/Cmd` + `G` or select the **Group nodes** icon in the toolbar. n8n creates the group and highlights the name field so you can name it straight away. Collapse or expand a group with its toggle icon, and ungroup it at any time with `Ctrl/Cmd` + `Shift` + `G`, which leaves the nodes on the canvas.
+
+A Canvas Group is saved with the workflow, so anyone who opens it sees the same structure. Whether a group is collapsed or expanded is a personal preference stored in your browser, so your view stays put when you come back without changing what teammates see. A few rules decide which nodes you can combine into one group: triggers stay outside them, the nodes have to form one connected chain, and an AI node keeps its sub-nodes (chat model, memory, and tools) inside the same group.
+
+Learn more in the [Canvas Groups documentation](https://app.gitbook.com/s/rPN1zU5jaYNvwH7RzxqA/understand-workflows/workflow-components/canvas-groups).
+
+[7] Gmail node Message Operations documentation — Get Many messages (https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.gmail/message-operations)
+## Get Many messages
+
+Use this operation to get two or more messages.
+
+Enter these parameters:
+
+* Select the **Credential to connect with** or create a new one.
+* **Resource**: Select **Message**.
+* **Operation**: Select **Get Many**.
+* **Return All**: Choose whether the node returns all messages (turned on) or only up to a set limit (turned off).
+* **Limit**: Enter the maximum number of messages to return. Only used if you've turned off **Return All**.
+* **Simplify**: Choose whether to return a simplified version of the response (turned on) or the raw data (turned off). Default is on.
+    * This is the same as setting the `format` for the API call to `metadata`, which returns email message IDs, labels, and email headers, including: From, To, CC, BCC, and Subject.
+
+### Get Many messages filters
+
+Use these filters to further refine the node's behavior:
+
+[8] Release notes pre n8n 2.0 — n8n@1.94.0 (https://docs.n8n.io/release-notes/1.x)
+* Open the **Nodes panel** from the editor
+* Search for the Node. Verified nodes are indicated by a shield 🛡️
+* Select the node and click **Install**
+
+\
+
+Once an Owner installs a node, everyone on the instance can start using it—just drag, drop, and connect like any other node in your workflow.
+
+🛠️ **Build a node and get it verified**
+
+Want your node to be verified and discoverable from the editor? Here’s how to get involved:
+
+1. Review the [community node verification guidelines](https://app.gitbook.com/s/r7wKI4I1BgdBCuq5Cvcx/create-nodes/build-your-node/reference/verification-guidelines).
+2. If you’re building something new, follow the recommendations for [creating nodes](https://app.gitbook.com/s/r7wKI4I1BgdBCuq5Cvcx/create-nodes/overview).
+3. Check your design against the [UX guidelines](https://app.gitbook.com/s/r7wKI4I1BgdBCuq5Cvcx/create-nodes/build-your-node/reference/ux-guidelines).
+4. [Submit your node](https://app.gitbook.com/s/r7wKI4I1BgdBCuq5Cvcx/create-nodes/deploy-your-node/submit-community-nodes) to npm.
+5. Request verification by filling out [this form](https://internal.users.n8n.cloud/form/f0ff9304-f34a-420e-99da-6103a2f8ac5b).
+
+**Already built a node? Raise your hand!**
+
+If you’ve already published a community node and want it considered for verification, make sure it meets the requirements noted above, then let us know by submitting the interest [form](https://internal.users.n8n.cloud/form/f0ff9304-f34a-420e-99da-6103a2f8ac5b). We’re actively curating the next batch and would love to include your work.
+
+### Extended logs view
+
+When workflows get complex, debugging can get... clicky. That’s where an extended **Logs View** comes in. Now you can get a clearer path to trace executions, troubleshoot issues, and understand the behavior of a complete workflow — without bouncing between node detail views.
+
+This update brings a unified, always-accessible panel to the bottom of the canvas, showing you each step of the execution as it happens. Whether you're working with loops, sub-workflows, or AI agents, you’ll see a structured view of everything that ran, in the order it ran—with input, output, and status info right where you need it.
+
+You can jump into node details when you want to dig deeper, or follow a single item through every step it touched. Real-time highlighting shows you which nodes are currently running or have failed, and you’ll see total execution time for any workflow—plus token usage for AI workflows to help monitor performance. And if you're debugging across multiple screens? Just pop the logs out and drag them wherever you’d like.
+
+⚙️**What it does**
+
+## The reply (plain text)
+<<<
+You can do this with standard flow logic: collect the incoming items, wait, then combine them in a Code node before the next step.
+
+1. Use a trigger or input node to receive each message.
+   n8n processes items one by one by default, so each incoming text is usually a separate item [2].
+
+2. Add a `Wait` step if you want a 90-second window.
+   A wait is the right general mechanism for “hold messages for a bit, then continue.” If your messages arrive as separate workflow executions, you’ll also need some way to store them temporarily between runs (for example, in a database or sheet). n8n itself does not have a dedicated “buffer incoming messages for 90 seconds” node in the docs I have.
+
+3. Use a `Code` node to merge the text fields into one message.
+   In the Code node, combine the incoming items into a single string, for example by joining each item’s text field with line breaks. This is general JavaScript:
+   ```js
+   const combined = items.map(item => item.json.text).join('\n');
+   return [{ json: { combined } }];
+   ```
+
+4. Send the combined output to your Gmail node.
+   If you’re using Gmail, feed the single combined field into the message body. The Gmail node supports normal message retrieval/filtering, but batching/combining is done upstream in your workflow [3][7].
+
+If your use case is actually sending Telegram messages in bursts, n8n’s docs suggest `Loop Over Items` plus a `Code` node to pause between batches [1], but for “combine 2–3 incoming WhatsApp lines into one context,” the key piece is the Code node plus a place to store messages until the window closes.
+
+If you want, I can sketch the exact workflow layout for your specific input source.
+>>>
+
+Grade the reply. Return the JSON object described in the rubric, and nothing else.

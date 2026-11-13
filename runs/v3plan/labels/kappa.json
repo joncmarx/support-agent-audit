@@ -1,0 +1,34 @@
+{
+ "category": {
+  "n": 140,
+  "raw_agreement": 0.7714,
+  "classes_rater1": {
+   "general_tech": 44,
+   "undocumented_n8n": 30,
+   "n8n_docs": 54,
+   "bug_or_release": 9,
+   "account_access": 3
+  },
+  "classes_rater2": {
+   "general_tech": 48,
+   "n8n_docs": 36,
+   "undocumented_n8n": 38,
+   "bug_or_release": 15,
+   "account_access": 3
+  },
+  "kappa": 0.6858
+ },
+ "side": {
+  "n": 140,
+  "raw_agreement": 0.8571,
+  "classes_rater1": {
+   "answerable": 98,
+   "human": 42
+  },
+  "classes_rater2": {
+   "answerable": 84,
+   "human": 56
+  },
+  "kappa": 0.6894
+ }
+}

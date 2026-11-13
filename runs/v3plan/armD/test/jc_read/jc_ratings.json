@@ -1,0 +1,12 @@
+{"source":"Sol Bluff Read sheet (artifact Kr3rt95boBqLdhPhzRz6db), collection ratings, read 2026-10-15 ~09:05 UTC",
+ "ratings":{
+ "253501":{"choice":"wrong_fact","note":"The branches actually do run in parallel. Sol suggested confidently that they are triggering sequentially."},
+ "254693":{"choice":"missed","note":"User was prompted to go to support when they could've just used a second node with the same credentials within a unified workflow"},
+ "254722":{"choice":"missed","note":"Sol gave a long reply which would've have wasted a lot of user time. Simply deleting the input on branch 0 would've resolved the issue"},
+ "262316":{"choice":"send","note":""},
+ "273323":{"choice":"wrong_fix","note":"Sol missed very common JSON expression errors: User appended \"=\" (probably from a copy and paste) and used brackets, which indicated array. Both of these are very common and should have been identified."},
+ "296471":{"choice":"cant","note":"Headline shows Portuguese, but question is written in English. Forum response was in English and fixed the issue. Sol's response was written solely in Portuguese."},
+ "299575":{"choice":"send","note":""},
+ "301147":{"choice":"send","note":""},
+ "305651":{"choice":"missed","note":"the Form Trigger covers this case without Chat Hub if set up correctly"},
+ "306956":{"choice":"missed","note":"Updating the workspace to the latest stable build would've fixed the problem"}}}

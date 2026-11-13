@@ -1,0 +1,1 @@
+{"hidden": ["294568", "281702", "278300", "277169", "293231", "266037", "255720", "281679", "256467", "286213", "273525"], "marker_hits": [], "regex": "(?i)(\\[\\s*solved\\s*\\]|\\(\\s*solved\\s*\\)|\\b(?:update|updated|edit|edited|solved|resolved|solution)\\s*[:\\-\u2013\u2014]|^\\s*\\**\\s*(?:update|edit|solved|resolved)\\b)"}

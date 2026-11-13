@@ -1,0 +1,582 @@
+[
+ {
+  "id": 253501,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 8,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.wait.md#0",
+   "build/flow-logic/understand-execution-order.md#0"
+  ],
+  "bm25_top": [
+   "build/flow-logic/understand-execution-order.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.wait.md#2",
+   "integrations/builtin/core-nodes/n8n-nodes-base.wait.md#3"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 254163,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 11,
+  "bot_chunks_from_pages": [
+   "build/flow-logic/loop.md#1",
+   "integrations/builtin/core-nodes/n8n-nodes-base.splitinbatches.md#0",
+   "build/flow-logic/loop.md#0"
+  ],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.code/common-issues.md#0",
+   "build/flow-logic/loop.md#2",
+   "integrations/builtin/core-nodes/n8n-nodes-base.splitinbatches.md#3"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "no",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 254829,
+  "pages": 4,
+  "page_found": true,
+  "evidence_chunks_on_pages": 27,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/app-nodes/n8n-nodes-base.googledrive/file-operations.md#3",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#3"
+  ],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#3",
+   "build/work-with-data/reference-data/reference-previous-nodes.md#0",
+   "integrations/builtin/app-nodes/n8n-nodes-base.googledrive/file-operations.md#7"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 255717,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 17,
+  "bot_chunks_from_pages": [
+   "connect/n8n-api/pagination.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#6",
+   "build/code-in-n8n/cookbook/http-request-node/pagination.md#0"
+  ],
+  "bm25_top": [
+   "build/code-in-n8n/cookbook/http-request-node/pagination.md#1",
+   "build/code-in-n8n/cookbook/http-request-node/pagination.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#6"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 258038,
+  "pages": 2,
+  "page_found": false,
+  "evidence_chunks_on_pages": 3,
+  "bot_chunks_from_pages": [],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.limit.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.compression.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.compression.md#1"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "no",
+  "how": "evidence page not retrieved"
+ },
+ {
+  "id": 258058,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 6,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/configure-n8n/basic-configuration/configuration-examples/configure-webhook-urls-with-reverse-proxy.md#0",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/deployment.md#3"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/configure-n8n/basic-configuration/configuration-examples/configure-webhook-urls-with-reverse-proxy.md#0",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/deployment.md#3",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/deployment.md#2"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 262316,
+  "pages": 1,
+  "page_found": false,
+  "evidence_chunks_on_pages": 4,
+  "bot_chunks_from_pages": [],
+  "bm25_top": [
+   "build/integrate-ai/understand-ai-components/retrieve-relevant-context.md#1",
+   "build/integrate-ai/understand-ai-components/retrieve-relevant-context.md#2",
+   "build/integrate-ai/understand-ai-components/retrieve-relevant-context.md#0"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "no",
+  "how": "evidence page not retrieved"
+ },
+ {
+  "id": 263598,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 11,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/common-issues.md#1",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/common-issues.md#0",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.chainllm.md#3",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.chainllm.md#1"
+  ],
+  "bm25_top": [
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.chainllm.md#3",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/common-issues.md#0",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/tools-agent.md#2"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 264040,
+  "pages": 1,
+  "page_found": true,
+  "evidence_chunks_on_pages": 8,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#1",
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#2",
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#5",
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#0"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#1",
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#5",
+   "deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-google-cloud-run.md#2"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 269849,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 7,
+  "bot_chunks_from_pages": [
+   "connect/create-nodes/build-your-node/reference/error-handling.md#1",
+   "connect/create-nodes/build-your-node/reference/error-handling.md#2",
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1",
+   "connect/create-nodes/build-your-node/reference/error-handling.md#1",
+   "connect/create-nodes/build-your-node/reference/error-handling.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 270167,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 13,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#3",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#4",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#5",
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#4",
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#2",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#3",
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#1"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#3",
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#4",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#5"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 278206,
+  "pages": 4,
+  "page_found": true,
+  "evidence_chunks_on_pages": 21,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/README.md#0",
+   "deploy/host-n8n/install-options/install-with-docker.md#0",
+   "deploy/host-n8n/README.md#1"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/install-options/install-with-docker.md#4",
+   "deploy/host-n8n/install-options/use-a-cloud-provider/use-docker-compose.md#3",
+   "deploy/host-n8n/install-options/install-with-docker.md#3"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "yes",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 279461,
+  "pages": 4,
+  "page_found": true,
+  "evidence_chunks_on_pages": 18,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/README.md#0",
+   "n8n-community-license/license-faq.md#0",
+   "deploy/use-n8n-cloud/start-your-free-trial.md#0"
+  ],
+  "bm25_top": [
+   "get-started/choose-how-to-use-n8n.md#2",
+   "deploy/host-n8n/README.md#0",
+   "get-started/choose-how-to-use-n8n.md#3"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 281482,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 9,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.chainllm.md#0",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.chainllm.md#3"
+  ],
+  "bm25_top": [
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.chainllm.md#0",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/tools-agent.md#2",
+   "integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/tools-agent.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 289757,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 13,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#2"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#2",
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/task-runners.md#3",
+   "deploy/host-n8n/configure-n8n/set-up-task-runners.md#1"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 290730,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 10,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#4",
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#5"
+  ],
+  "bm25_top": [
+   "build/code-in-n8n/cookbook/code-node/get-the-binary-data-buffer.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#1",
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#4"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": true,
+  "verdict": "partly",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 292551,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 9,
+  "bot_chunks_from_pages": [
+   "build/flow-logic/handle-errors-gracefully.md#2",
+   "build/flow-logic/handle-errors-gracefully.md#1"
+  ],
+  "bm25_top": [
+   "build/understand-workflows/workflow-components/work-with-nodes.md#1",
+   "build/flow-logic/handle-errors-gracefully.md#2",
+   "build/manage-workflows/configure-workflow-settings.md#1"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": true,
+  "verdict": "partly",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 295656,
+  "pages": 5,
+  "page_found": true,
+  "evidence_chunks_on_pages": 24,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#4",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#1",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#0",
+   "build/flow-logic/wait.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.webhook/common-issues.md#3",
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1",
+   "deploy/host-n8n/configure-n8n/scaling/enable-queue-mode.md#0"
+  ],
+  "bm25_top": [
+   "build/flow-logic/wait.md#0",
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 296471,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 13,
+  "bot_chunks_from_pages": [
+   "build/work-with-data/transform-data/expressions-for-data-transformation.md#2",
+   "build/work-with-data/transform-data/expressions-for-data-transformation.md#0",
+   "build/understand-workflows/create-and-edit-credentials.md#2",
+   "build/work-with-data/transform-data/expressions-for-data-transformation.md#1"
+  ],
+  "bm25_top": [
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.lmchatopenai/README.md#0",
+   "build/work-with-data/transform-data/expressions-for-data-transformation.md#0",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.lmchatopenai/README.md#1"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 298451,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 10,
+  "bot_chunks_from_pages": [
+   "deploy/host-n8n/configure-n8n/basic-configuration/use-environment-variables/executions.md#2",
+   "deploy/host-n8n/configure-n8n/scaling/manage-execution-data.md#1",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#1"
+  ],
+  "bm25_top": [
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#1",
+   "deploy/host-n8n/configure-n8n/scaling/manage-execution-data.md#0",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 299876,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 15,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.merge.md#4"
+  ],
+  "bm25_top": [
+   "build/flow-logic/understand-execution-order.md#0",
+   "changelog/v10-migration-guide.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.merge.md#2"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "partly",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 300701,
+  "pages": 1,
+  "page_found": true,
+  "evidence_chunks_on_pages": 3,
+  "bot_chunks_from_pages": [
+   "administer/manage-users-and-access/set-permissions-and-roles-rbac/organize-work-in-projects.md#1"
+  ],
+  "bm25_top": [
+   "administer/manage-users-and-access/set-permissions-and-roles-rbac/organize-work-in-projects.md#1",
+   "administer/manage-users-and-access/set-permissions-and-roles-rbac/organize-work-in-projects.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 301147,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 4,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/credentials/send-email/README.md#0"
+  ],
+  "bm25_top": [
+   "integrations/builtin/credentials/send-email/README.md#0",
+   "integrations/builtin/credentials/send-email/gmail.md#1",
+   "integrations/builtin/credentials/send-email/gmail.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 301166,
+  "pages": 2,
+  "page_found": false,
+  "evidence_chunks_on_pages": 3,
+  "bot_chunks_from_pages": [],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.webhook/workflow-development.md#0",
+   "deploy/host-n8n/install-options/install-with-npm.md#0",
+   "deploy/host-n8n/install-options/install-with-npm.md#1"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "no",
+  "how": "evidence page not retrieved"
+ },
+ {
+  "id": 303831,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 17,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#2",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#1"
+  ],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#2",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#4",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/README.md#3"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 305651,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 29,
+  "bot_chunks_from_pages": [
+   "changelog/v30-breaking-changes.md#11"
+  ],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.form.md#4",
+   "integrations/builtin/core-nodes/n8n-nodes-base.formtrigger.md#2",
+   "changelog/v30-breaking-changes.md#4"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "no",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 307309,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 4,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolvectorstore.md#1"
+  ],
+  "bm25_top": [
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolvectorstore.md#1",
+   "build/integrate-ai/understand-ai-components/what-agents-do.md#0",
+   "integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolvectorstore.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 309749,
+  "pages": 3,
+  "page_found": true,
+  "evidence_chunks_on_pages": 27,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.sendemail.md#1",
+   "integrations/builtin/core-nodes/n8n-nodes-base.sendemail.md#4"
+  ],
+  "bm25_top": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.sendemail.md#1",
+   "build/work-with-data/transform-data/expression-reference/README.md#1",
+   "build/work-with-data/reference-data/reference-previous-nodes.md#0"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ },
+ {
+  "id": 310715,
+  "pages": 2,
+  "page_found": true,
+  "evidence_chunks_on_pages": 13,
+  "bot_chunks_from_pages": [
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#0",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#2"
+  ],
+  "bm25_top": [
+   "integrations/builtin/credentials/httprequest.md#7",
+   "integrations/builtin/core-nodes/n8n-nodes-base.httprequest/common-issues.md#3",
+   "integrations/builtin/credentials/httprequest.md#5"
+  ],
+  "top_in_bot": false,
+  "top3_in_bot": false,
+  "verdict": "no",
+  "how": "Claude read the key fix against the evidence-page passages the bot had"
+ },
+ {
+  "id": 311939,
+  "pages": 4,
+  "page_found": true,
+  "evidence_chunks_on_pages": 23,
+  "bot_chunks_from_pages": [
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#0",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#1",
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#0",
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1",
+   "build/flow-logic/loop.md#2"
+  ],
+  "bm25_top": [
+   "deploy/host-n8n/configure-n8n/scaling/fix-memory-issues.md#1",
+   "deploy/use-n8n-cloud/configure-cloud/manage-your-data.md#0",
+   "build/flow-logic/loop.md#2"
+  ],
+  "top_in_bot": true,
+  "top3_in_bot": true,
+  "verdict": "yes",
+  "how": "best-matching evidence passage (keyword match to the key fix) was among the bot's 8"
+ }
+]

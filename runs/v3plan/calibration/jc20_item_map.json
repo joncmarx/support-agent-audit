@@ -1,0 +1,102 @@
+{
+ "item-01": {
+  "rid": "v2:dev:291082:final",
+  "stratum": "A",
+  "item_hash": "d2cbf062205d25fa"
+ },
+ "item-02": {
+  "rid": "v3:dev:253894:final",
+  "stratum": "Q",
+  "item_hash": "1f1830b110d529b1"
+ },
+ "item-03": {
+  "rid": "v2:dev:306976:final",
+  "stratum": "W",
+  "item_hash": "086eac82379dea95"
+ },
+ "item-04": {
+  "rid": "v2:dev:258400:final",
+  "stratum": "W",
+  "item_hash": "dfa76970ab9da258"
+ },
+ "item-05": {
+  "rid": "v3:dev:297787:final",
+  "stratum": "A",
+  "item_hash": "f3cbec8700bcce12"
+ },
+ "item-06": {
+  "rid": "v1:dev:310250:final",
+  "stratum": "Q",
+  "item_hash": "010993c0d998c7f0"
+ },
+ "item-07": {
+  "rid": "v1:dev:295767:final",
+  "stratum": "Q",
+  "item_hash": "0e2a5582da2b5ea8"
+ },
+ "item-08": {
+  "rid": "v1:dev:277740:final",
+  "stratum": "H",
+  "item_hash": "56ff904da31afc59"
+ },
+ "item-09": {
+  "rid": "v1:dev:304791:final",
+  "stratum": "W",
+  "item_hash": "f57e5c02796befb9"
+ },
+ "item-10": {
+  "rid": "v3:dev:295919:final",
+  "stratum": "A",
+  "item_hash": "175ec1e788d2bc71"
+ },
+ "item-11": {
+  "rid": "v2:dev:300857:final",
+  "stratum": "Q",
+  "item_hash": "4dc8e6f2d3a083f4"
+ },
+ "item-12": {
+  "rid": "v3:dev:271805:final",
+  "stratum": "H",
+  "item_hash": "a4303f5568de478a"
+ },
+ "item-13": {
+  "rid": "v2:dev:257140:final",
+  "stratum": "W",
+  "item_hash": "963064ee682c9a31"
+ },
+ "item-14": {
+  "rid": "v2:dev:297693:final",
+  "stratum": "H",
+  "item_hash": "60bd7be66b6a8925"
+ },
+ "item-15": {
+  "rid": "v1:dev:296107:final",
+  "stratum": "A",
+  "item_hash": "605654e6ffdf632d"
+ },
+ "item-16": {
+  "rid": "v4:dev:274129:final",
+  "stratum": "H",
+  "item_hash": "09593cf01a3f9f8c"
+ },
+ "item-17": {
+  "rid": "v3:dev:309298:final",
+  "stratum": "W",
+  "item_hash": "6c1992866fb7e43e"
+ },
+ "item-18": {
+  "rid": "v3:dev:296021:final",
+  "stratum": "A",
+  "item_hash": "f0954d9ab187ee25"
+ },
+ "item-19": {
+  "rid": "v3:dev:295991:final",
+  "stratum": "W",
+  "item_hash": "3be2701d02c96e00"
+ },
+ "item-20": {
+  "rid": "v4:dev:298507:final",
+  "stratum": "H",
+  "item_hash": "6aa6669776aa873a"
+ }
+}

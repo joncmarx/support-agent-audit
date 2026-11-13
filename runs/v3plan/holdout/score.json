@@ -1,0 +1,122 @@
+{
+ "v4": {
+  "all": {
+   "n": 100,
+   "pending": 0,
+   "resolved": 5,
+   "partial": 1,
+   "right_question": 1,
+   "correct_handoff": 25,
+   "unnecessary_handoff": 62,
+   "wrong_hedged": 2,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "answerable": 71,
+   "unnecessary_per_100_answerable": 87.3,
+   "trust_range_95_per_100": [
+    1.1,
+    9.9
+   ],
+   "severity": {
+    "disputed": 1,
+    "S1_wrong_fact": 2,
+    "S2_wrong_fix": 1
+   },
+   "settlement": {
+    "two_of_three": 14,
+    "agree": 85,
+    "unresolved": 1
+   },
+   "gate_met": false
+  },
+  "without_hidden_history": {
+   "n": 89,
+   "pending": 0,
+   "resolved": 5,
+   "partial": 1,
+   "right_question": 1,
+   "correct_handoff": 23,
+   "unnecessary_handoff": 53,
+   "wrong_hedged": 2,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "answerable": 62,
+   "unnecessary_per_100_answerable": 85.5,
+   "trust_range_95_per_100": [
+    1.2,
+    11.1
+   ],
+   "severity": {
+    "disputed": 1,
+    "S1_wrong_fact": 2,
+    "S2_wrong_fix": 1
+   },
+   "settlement": {
+    "two_of_three": 14,
+    "agree": 74,
+    "unresolved": 1
+   },
+   "gate_met": null
+  }
+ },
+ "v5": {
+  "all": {
+   "n": 100,
+   "pending": 0,
+   "resolved": 5,
+   "partial": 1,
+   "right_question": 1,
+   "correct_handoff": 25,
+   "unnecessary_handoff": 62,
+   "wrong_hedged": 2,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "answerable": 71,
+   "unnecessary_per_100_answerable": 87.3,
+   "trust_range_95_per_100": [
+    1.1,
+    9.9
+   ],
+   "severity": {
+    "disputed": 1,
+    "S1_wrong_fact": 2,
+    "S2_wrong_fix": 1
+   },
+   "settlement": {
+    "two_of_three": 14,
+    "agree": 85,
+    "unresolved": 1
+   },
+   "gate_met": false
+  },
+  "without_hidden_history": {
+   "n": 89,
+   "pending": 0,
+   "resolved": 5,
+   "partial": 1,
+   "right_question": 1,
+   "correct_handoff": 23,
+   "unnecessary_handoff": 53,
+   "wrong_hedged": 2,
+   "no_progress": 0,
+   "confidently_wrong": 4,
+   "answerable": 62,
+   "unnecessary_per_100_answerable": 85.5,
+   "trust_range_95_per_100": [
+    1.2,
+    11.1
+   ],
+   "severity": {
+    "disputed": 1,
+    "S1_wrong_fact": 2,
+    "S2_wrong_fix": 1
+   },
+   "settlement": {
+    "two_of_three": 14,
+    "agree": 74,
+    "unresolved": 1
+   },
+   "gate_met": null
+  }
+ }
+}

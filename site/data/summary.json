@@ -1,0 +1,990 @@
+{
+ "scores": {
+  "dev": {
+   "v1": {
+    "resolved_range_95_per_100": [
+     3.9,
+     25.1
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 5,
+    "partial": 7,
+    "right_question": 0,
+    "correct_handoff": 2,
+    "unnecessary_handoff": 17,
+    "wrong_hedged": 6,
+    "no_progress": 1,
+    "confidently_wrong": 5,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 51.5,
+    "trust_range_95_per_100": [
+     3.9,
+     25.1
+    ],
+    "severity": {
+     "S2_wrong_fix": 3,
+     "disputed": 1,
+     "S1_wrong_fact": 1
+    },
+    "settlement": {
+     "agree": 31,
+     "unresolved": 2,
+     "two_of_three": 10
+    }
+   },
+   "A_draft": {
+    "resolved_range_95_per_100": [
+     11.8,
+     38.6
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 10,
+    "partial": 7,
+    "right_question": 0,
+    "correct_handoff": 4,
+    "unnecessary_handoff": 7,
+    "wrong_hedged": 4,
+    "no_progress": 0,
+    "confidently_wrong": 11,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 21.2,
+    "trust_range_95_per_100": [
+     13.5,
+     41.2
+    ],
+    "severity": {
+     "disputed": 2,
+     "S2_wrong_fix": 4,
+     "S1_wrong_fact": 5
+    },
+    "settlement": {
+     "agree": 28,
+     "unresolved": 2,
+     "two_of_three": 13
+    }
+   },
+   "A": {
+    "resolved_range_95_per_100": [
+     1.5,
+     19.1
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 3,
+    "partial": 0,
+    "right_question": 0,
+    "correct_handoff": 9,
+    "unnecessary_handoff": 29,
+    "wrong_hedged": 2,
+    "no_progress": 0,
+    "confidently_wrong": 0,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 87.9,
+    "trust_range_95_per_100": [
+     0.0,
+     8.2
+    ],
+    "severity": {},
+    "settlement": {
+     "agree": 40,
+     "two_of_three": 3
+    }
+   },
+   "B": {
+    "resolved_range_95_per_100": [
+     6.8,
+     30.7
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 7,
+    "partial": 5,
+    "right_question": 0,
+    "correct_handoff": 6,
+    "unnecessary_handoff": 18,
+    "wrong_hedged": 3,
+    "no_progress": 0,
+    "confidently_wrong": 4,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 54.5,
+    "trust_range_95_per_100": [
+     2.6,
+     22.1
+    ],
+    "severity": {
+     "disputed": 2,
+     "S1_wrong_fact": 2
+    },
+    "settlement": {
+     "agree": 30,
+     "unresolved": 2,
+     "two_of_three": 11
+    }
+   },
+   "D": {
+    "resolved_range_95_per_100": [
+     25.0,
+     55.6
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 17,
+    "partial": 2,
+    "right_question": 1,
+    "correct_handoff": 7,
+    "unnecessary_handoff": 9,
+    "wrong_hedged": 2,
+    "no_progress": 1,
+    "confidently_wrong": 4,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 27.3,
+    "trust_range_95_per_100": [
+     2.6,
+     22.1
+    ],
+    "severity": {
+     "disputed": 2,
+     "S1_wrong_fact": 2
+    },
+    "settlement": {
+     "agree": 34,
+     "unresolved": 3,
+     "two_of_three": 6
+    }
+   },
+   "DF": {
+    "resolved_range_95_per_100": [
+     25.0,
+     55.6
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 17,
+    "partial": 6,
+    "right_question": 2,
+    "correct_handoff": 6,
+    "unnecessary_handoff": 7,
+    "wrong_hedged": 1,
+    "no_progress": 1,
+    "confidently_wrong": 3,
+    "answerable": 34,
+    "unnecessary_per_100_answerable": 20.6,
+    "trust_range_95_per_100": [
+     1.5,
+     19.1
+    ],
+    "severity": {
+     "S2_wrong_fix": 1,
+     "S1_wrong_fact": 2
+    },
+    "settlement": {
+     "agree": 33,
+     "two_of_three": 9,
+     "unresolved": 1
+    }
+   },
+   "F0": {
+    "resolved_range_95_per_100": [
+     17.2,
+     46.1
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 13,
+    "partial": 7,
+    "right_question": 1,
+    "correct_handoff": 3,
+    "unnecessary_handoff": 2,
+    "wrong_hedged": 7,
+    "no_progress": 1,
+    "confidently_wrong": 9,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 6.1,
+    "trust_range_95_per_100": [
+     10.0,
+     36.0
+    ],
+    "severity": {
+     "S2_wrong_fix": 3,
+     "S1_wrong_fact": 5,
+     "disputed": 1
+    },
+    "settlement": {
+     "two_of_three": 17,
+     "agree": 24,
+     "unresolved": 2
+    }
+   },
+   "F": {
+    "resolved_range_95_per_100": [
+     15.3,
+     43.7
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 12,
+    "partial": 7,
+    "right_question": 0,
+    "correct_handoff": 2,
+    "unnecessary_handoff": 4,
+    "wrong_hedged": 4,
+    "no_progress": 2,
+    "confidently_wrong": 12,
+    "answerable": 34,
+    "unnecessary_per_100_answerable": 11.8,
+    "trust_range_95_per_100": [
+     15.3,
+     43.7
+    ],
+    "severity": {
+     "S2_wrong_fix": 5,
+     "S1_wrong_fact": 6,
+     "disputed": 1
+    },
+    "settlement": {
+     "two_of_three": 17,
+     "agree": 23,
+     "unresolved": 3
+    }
+   },
+   "G": {
+    "resolved_range_95_per_100": [
+     1.5,
+     19.1
+    ],
+    "n": 43,
+    "pending": 0,
+    "resolved": 3,
+    "partial": 0,
+    "right_question": 0,
+    "correct_handoff": 9,
+    "unnecessary_handoff": 25,
+    "wrong_hedged": 1,
+    "no_progress": 0,
+    "confidently_wrong": 5,
+    "answerable": 33,
+    "unnecessary_per_100_answerable": 75.8,
+    "trust_range_95_per_100": [
+     3.9,
+     25.1
+    ],
+    "severity": {
+     "S1_wrong_fact": 4,
+     "disputed": 1
+    },
+    "settlement": {
+     "agree": 34,
+     "two_of_three": 8,
+     "unresolved": 1
+    }
+   }
+  },
+  "test": {
+   "v1": {
+    "resolved_range_95_per_100": [
+     2.3,
+     13.0
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 6,
+    "partial": 10,
+    "right_question": 1,
+    "correct_handoff": 21,
+    "unnecessary_handoff": 31,
+    "wrong_hedged": 8,
+    "no_progress": 2,
+    "confidently_wrong": 18,
+    "answerable": 67,
+    "unnecessary_per_100_answerable": 46.3,
+    "trust_range_95_per_100": [
+     11.4,
+     27.7
+    ],
+    "severity": {
+     "S1_wrong_fact": 6,
+     "S2_wrong_fix": 9,
+     "disputed": 3
+    },
+    "settlement": {
+     "agree": 64,
+     "two_of_three": 28,
+     "unresolved": 5
+    }
+   },
+   "A_draft": {
+    "resolved_range_95_per_100": [
+     12.2,
+     28.9
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 19,
+    "partial": 9,
+    "right_question": 1,
+    "correct_handoff": 14,
+    "unnecessary_handoff": 12,
+    "wrong_hedged": 9,
+    "no_progress": 3,
+    "confidently_wrong": 30,
+    "answerable": 67,
+    "unnecessary_per_100_answerable": 17.9,
+    "trust_range_95_per_100": [
+     21.9,
+     41.1
+    ],
+    "severity": {
+     "S1_wrong_fact": 17,
+     "S2_wrong_fix": 5,
+     "disputed": 8
+    },
+    "settlement": {
+     "agree": 50,
+     "two_of_three": 36,
+     "unresolved": 11
+    }
+   },
+   "A": {
+    "resolved_range_95_per_100": [
+     2.3,
+     13.0
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 6,
+    "partial": 0,
+    "right_question": 0,
+    "correct_handoff": 28,
+    "unnecessary_handoff": 61,
+    "wrong_hedged": 0,
+    "no_progress": 0,
+    "confidently_wrong": 2,
+    "answerable": 67,
+    "unnecessary_per_100_answerable": 91.0,
+    "trust_range_95_per_100": [
+     0.3,
+     7.3
+    ],
+    "severity": {
+     "disputed": 1,
+     "S1_wrong_fact": 1
+    },
+    "settlement": {
+     "agree": 90,
+     "two_of_three": 6,
+     "unresolved": 1
+    }
+   },
+   "B": {
+    "resolved_range_95_per_100": [
+     7.3,
+     21.8
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 13,
+    "partial": 5,
+    "right_question": 1,
+    "correct_handoff": 24,
+    "unnecessary_handoff": 41,
+    "wrong_hedged": 2,
+    "no_progress": 3,
+    "confidently_wrong": 8,
+    "answerable": 67,
+    "unnecessary_per_100_answerable": 61.2,
+    "trust_range_95_per_100": [
+     3.6,
+     15.6
+    ],
+    "severity": {
+     "disputed": 4,
+     "S2_wrong_fix": 2,
+     "S1_wrong_fact": 2
+    },
+    "settlement": {
+     "agree": 71,
+     "unresolved": 7,
+     "two_of_three": 19
+    }
+   },
+   "D": {
+    "resolved_range_95_per_100": [
+     16.5,
+     34.5
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 24,
+    "partial": 6,
+    "right_question": 8,
+    "correct_handoff": 22,
+    "unnecessary_handoff": 22,
+    "wrong_hedged": 0,
+    "no_progress": 5,
+    "confidently_wrong": 10,
+    "answerable": 67,
+    "unnecessary_per_100_answerable": 32.8,
+    "trust_range_95_per_100": [
+     5.1,
+     18.1
+    ],
+    "severity": {
+     "disputed": 5,
+     "S1_wrong_fact": 5
+    },
+    "settlement": {
+     "agree": 71,
+     "unresolved": 6,
+     "two_of_three": 20
+    }
+   },
+   "F0": {
+    "resolved_range_95_per_100": [
+     16.5,
+     34.5
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 24,
+    "partial": 9,
+    "right_question": 4,
+    "correct_handoff": 10,
+    "unnecessary_handoff": 7,
+    "wrong_hedged": 4,
+    "no_progress": 6,
+    "confidently_wrong": 33,
+    "answerable": 67,
+    "unnecessary_per_100_answerable": 10.4,
+    "trust_range_95_per_100": [
+     24.7,
+     44.3
+    ],
+    "severity": {
+     "S1_wrong_fact": 11,
+     "S2_wrong_fix": 13,
+     "disputed": 9
+    },
+    "settlement": {
+     "unresolved": 15,
+     "two_of_three": 36,
+     "agree": 46
+    }
+   },
+   "F": {
+    "resolved_range_95_per_100": [
+     19.2,
+     37.9
+    ],
+    "n": 97,
+    "pending": 0,
+    "resolved": 27,
+    "partial": 16,
+    "right_question": 1,
+    "correct_handoff": 6,
+    "unnecessary_handoff": 5,
+    "wrong_hedged": 11,
+    "no_progress": 2,
+    "confidently_wrong": 29,
+    "answerable": 69,
+    "unnecessary_per_100_answerable": 7.2,
+    "trust_range_95_per_100": [
+     21.0,
+     40.0
+    ],
+    "severity": {
+     "S1_wrong_fact": 15,
+     "S2_wrong_fix": 9,
+     "disputed": 4,
+     "S3_unsafe": 1
+    },
+    "settlement": {
+     "agree": 57,
+     "two_of_three": 35,
+     "unresolved": 5
+    }
+   }
+  },
+  "holdout": {
+   "A": {
+    "resolved_range_95_per_100": [
+     1.6,
+     11.3
+    ],
+    "n": 100,
+    "pending": 0,
+    "resolved": 5,
+    "partial": 1,
+    "right_question": 1,
+    "correct_handoff": 25,
+    "unnecessary_handoff": 62,
+    "wrong_hedged": 2,
+    "no_progress": 0,
+    "confidently_wrong": 4,
+    "answerable": 71,
+    "unnecessary_per_100_answerable": 87.3,
+    "trust_range_95_per_100": [
+     1.1,
+     9.9
+    ],
+    "severity": {
+     "disputed": 1,
+     "S1_wrong_fact": 2,
+     "S2_wrong_fix": 1
+    },
+    "settlement": {
+     "two_of_three": 14,
+     "agree": 85,
+     "unresolved": 1
+    }
+   }
+  }
+ },
+ "handoff_all": {
+  "dev": {
+   "unnecessary_handoff": 33,
+   "correct_handoff": 10
+  },
+  "test": {
+   "correct_handoff": 30,
+   "unnecessary_handoff": 67
+  }
+ },
+ "kappa_regrade": {
+  "action": {
+   "n": 403,
+   "raw_agreement": 0.8536,
+   "classes_rater1": {
+    "mixed": 123,
+    "handed_off": 196,
+    "answered": 61,
+    "asked": 23
+   },
+   "classes_rater2": {
+    "handed_off": 243,
+    "mixed": 70,
+    "answered": 70,
+    "asked": 20
+   },
+   "kappa": 0.7656
+  },
+  "fix_verdict": {
+   "n": 403,
+   "raw_agreement": 0.799,
+   "classes_rater1": {
+    "wrong": 50,
+    "partial": 119,
+    "no_fix": 194,
+    "correct": 40
+   },
+   "classes_rater2": {
+    "wrong": 57,
+    "partial": 64,
+    "no_fix": 219,
+    "correct": 63
+   },
+   "kappa": 0.6947
+  },
+  "material_error": {
+   "n": 403,
+   "raw_agreement": 0.8561,
+   "classes_rater1": {
+    "true": 103,
+    "false": 300
+   },
+   "classes_rater2": {
+    "true": 71,
+    "false": 332
+   },
+   "kappa": 0.5788
+  },
+  "outcome": {
+   "n": 403,
+   "raw_agreement": 0.7246,
+   "classes_rater1": {
+    "wrong_hedged": 36,
+    "unnecessary_handoff": 149,
+    "confidently_wrong": 72,
+    "resolved": 21,
+    "correct_handoff": 63,
+    "partial": 60,
+    "right_question": 2
+   },
+   "classes_rater2": {
+    "wrong_hedged": 29,
+    "unnecessary_handoff": 180,
+    "confidently_wrong": 42,
+    "resolved": 51,
+    "correct_handoff": 79,
+    "partial": 19,
+    "right_question": 2,
+    "no_progress": 1
+   },
+   "kappa": 0.6402
+  }
+ },
+ "reviewers": {
+  "dev": {
+   "v4": {
+    "n": 43,
+    "pending": 0,
+    "resolved": 3,
+    "partial": 0,
+    "right_question": 0,
+    "correct_handoff": 9,
+    "unnecessary_handoff": 29,
+    "wrong_hedged": 2,
+    "no_progress": 0,
+    "confidently_wrong": 0,
+    "unresolved": 0,
+    "kinds": {
+     "passed": 7,
+     "reused_v4_handoff": 36
+    },
+    "final_failure_rate": 0.0,
+    "unnecessary_per_100_answerable": 87.9,
+    "trust_range_95_per_100": [
+     0.0,
+     8.2
+    ],
+    "drafts_let_through": {
+     "resolved": 3,
+     "correct_handoff": 2,
+     "wrong_hedged": 1,
+     "unnecessary_handoff": 1
+    },
+    "drafts_blocked": {
+     "confidently_wrong": 11,
+     "wrong_hedged": 3,
+     "partial": 7,
+     "unnecessary_handoff": 6,
+     "resolved": 7,
+     "correct_handoff": 2
+    }
+   },
+   "xiaomi/mimo-v2.6-pro": {
+    "n": 43,
+    "pending": 0,
+    "resolved": 7,
+    "partial": 5,
+    "right_question": 0,
+    "correct_handoff": 6,
+    "unnecessary_handoff": 18,
+    "wrong_hedged": 3,
+    "no_progress": 0,
+    "confidently_wrong": 4,
+    "unresolved": 2,
+    "kinds": {
+     "passed": 27,
+     "reused_v4_handoff": 16
+    },
+    "final_failure_rate": 0.0,
+    "unnecessary_per_100_answerable": 54.5,
+    "trust_range_95_per_100": [
+     2.6,
+     22.1
+    ],
+    "drafts_let_through": {
+     "resolved": 7,
+     "correct_handoff": 3,
+     "confidently_wrong": 4,
+     "partial": 5,
+     "unnecessary_handoff": 6,
+     "wrong_hedged": 2
+    },
+    "drafts_blocked": {
+     "wrong_hedged": 2,
+     "confidently_wrong": 7,
+     "resolved": 3,
+     "unnecessary_handoff": 1,
+     "correct_handoff": 1,
+     "partial": 2
+    },
+    "cost_usd": 0.1121,
+    "cents_per_question": 0.261,
+    "longest_reply_tokens": 2667,
+    "routes": {
+     "api": 43
+    },
+    "hosts": {
+     "Xiaomi": 43
+    },
+    "attempt_failures": 0,
+    "passes_screen": false
+   }
+  },
+  "test": {
+   "v4": {
+    "n": 97,
+    "pending": 0,
+    "resolved": 6,
+    "partial": 0,
+    "right_question": 0,
+    "correct_handoff": 28,
+    "unnecessary_handoff": 61,
+    "wrong_hedged": 0,
+    "no_progress": 0,
+    "confidently_wrong": 2,
+    "unresolved": 1,
+    "kinds": {
+     "reused_v4_handoff": 87,
+     "passed": 10
+    },
+    "final_failure_rate": 0.0,
+    "unnecessary_per_100_answerable": 91.0,
+    "trust_range_95_per_100": [
+     0.3,
+     7.3
+    ],
+    "drafts_let_through": {
+     "resolved": 6,
+     "correct_handoff": 3,
+     "confidently_wrong": 1
+    },
+    "drafts_blocked": {
+     "unnecessary_handoff": 12,
+     "resolved": 13,
+     "no_progress": 3,
+     "confidently_wrong": 29,
+     "wrong_hedged": 9,
+     "correct_handoff": 11,
+     "partial": 9,
+     "right_question": 1
+    }
+   },
+   "xiaomi/mimo-v2.6-pro": {
+    "n": 97,
+    "pending": 0,
+    "resolved": 13,
+    "partial": 5,
+    "right_question": 1,
+    "correct_handoff": 24,
+    "unnecessary_handoff": 41,
+    "wrong_hedged": 2,
+    "no_progress": 3,
+    "confidently_wrong": 8,
+    "unresolved": 7,
+    "kinds": {
+     "passed": 50,
+     "reused_v4_handoff": 46,
+     "new_handoff": 1
+    },
+    "final_failure_rate": 0.0,
+    "unnecessary_per_100_answerable": 61.2,
+    "trust_range_95_per_100": [
+     3.6,
+     15.6
+    ],
+    "drafts_let_through": {
+     "unnecessary_handoff": 8,
+     "no_progress": 3,
+     "resolved": 13,
+     "confidently_wrong": 7,
+     "correct_handoff": 12,
+     "partial": 5,
+     "wrong_hedged": 1,
+     "right_question": 1
+    },
+    "drafts_blocked": {
+     "resolved": 6,
+     "confidently_wrong": 23,
+     "wrong_hedged": 8,
+     "correct_handoff": 2,
+     "unnecessary_handoff": 4,
+     "partial": 4
+    },
+    "cost_usd": 0.3187,
+    "cents_per_question": 0.329,
+    "longest_reply_tokens": 7110,
+    "routes": {
+     "api": 97
+    },
+    "hosts": {
+     "Xiaomi": 97
+    },
+    "attempt_failures": 0
+   }
+  }
+ },
+ "paired_test": [
+  {
+   "a": "D",
+   "b": "A_draft",
+   "outcome": "confidently_wrong",
+   "diff_per_100": -20.6,
+   "range_95": [
+    -30.9,
+    -10.3
+   ],
+   "clear": true
+  },
+  {
+   "a": "D",
+   "b": "A_draft",
+   "outcome": "resolved",
+   "diff_per_100": 5.2,
+   "range_95": [
+    -4.1,
+    14.4
+   ],
+   "clear": false
+  },
+  {
+   "a": "D",
+   "b": "A",
+   "outcome": "resolved",
+   "diff_per_100": 18.6,
+   "range_95": [
+    10.3,
+    26.8
+   ],
+   "clear": true
+  },
+  {
+   "a": "D",
+   "b": "A",
+   "outcome": "confidently_wrong",
+   "diff_per_100": 8.2,
+   "range_95": [
+    2.1,
+    14.4
+   ],
+   "clear": true
+  },
+  {
+   "a": "B",
+   "b": "A",
+   "outcome": "resolved",
+   "diff_per_100": 7.2,
+   "range_95": [
+    2.1,
+    13.4
+   ],
+   "clear": true
+  },
+  {
+   "a": "B",
+   "b": "A",
+   "outcome": "confidently_wrong",
+   "diff_per_100": 6.2,
+   "range_95": [
+    2.1,
+    11.3
+   ],
+   "clear": true
+  },
+  {
+   "a": "F",
+   "b": "F0",
+   "outcome": "resolved",
+   "diff_per_100": 3.1,
+   "range_95": [
+    -3.1,
+    10.3
+   ],
+   "clear": false
+  },
+  {
+   "a": "F",
+   "b": "F0",
+   "outcome": "confidently_wrong",
+   "diff_per_100": -4.1,
+   "range_95": [
+    -14.4,
+    6.2
+   ],
+   "clear": false
+  },
+  {
+   "a": "F0",
+   "b": "A_draft",
+   "outcome": "resolved",
+   "diff_per_100": 5.2,
+   "range_95": [
+    -2.1,
+    12.4
+   ],
+   "clear": false
+  },
+  {
+   "a": "F0",
+   "b": "A_draft",
+   "outcome": "confidently_wrong",
+   "diff_per_100": 3.1,
+   "range_95": [
+    -8.2,
+    14.4
+   ],
+   "clear": false
+  }
+ ],
+ "jc_read_D_test": {
+  "253501": {
+   "choice": "wrong_fact",
+   "note": "The branches actually do run in parallel. Sol suggested confidently that they are triggering sequentially."
+  },
+  "254693": {
+   "choice": "missed",
+   "note": "User was prompted to go to support when they could've just used a second node with the same credentials within a unified workflow"
+  },
+  "254722": {
+   "choice": "missed",
+   "note": "Sol gave a long reply which would've have wasted a lot of user time. Simply deleting the input on branch 0 would've resolved the issue"
+  },
+  "262316": {
+   "choice": "send",
+   "note": ""
+  },
+  "273323": {
+   "choice": "wrong_fix",
+   "note": "Sol missed very common JSON expression errors: User appended \"=\" (probably from a copy and paste) and used brackets, which indicated array. Both of these are very common and should have been identified."
+  },
+  "296471": {
+   "choice": "cant",
+   "note": "Headline shows Portuguese, but question is written in English. Forum response was in English and fixed the issue. Sol's response was written solely in Portuguese."
+  },
+  "299575": {
+   "choice": "send",
+   "note": ""
+  },
+  "301147": {
+   "choice": "send",
+   "note": ""
+  },
+  "305651": {
+   "choice": "missed",
+   "note": "the Form Trigger covers this case without Chat Hub if set up correctly"
+  },
+  "306956": {
+   "choice": "missed",
+   "note": "Updating the workspace to the latest stable build would've fixed the problem"
+  }
+ },
+ "spend": [
+  {
+   "1-dryrun": 0.3,
+   "1-labels": 7.92,
+   "1-regrade": 10.84,
+   "1-screen": 3.07,
+   "2-armB": 0.34,
+   "2-smoke": 0.05,
+   "2-trial": 3.65,
+   "3-armD": 3.49,
+   "3-armD-practice": 1.32,
+   "4-armDF-practice": 1.41,
+   "4-armF": 3.6,
+   "4-armF-practice": 1.5,
+   "4-armF0": 4.05,
+   "4-armF0-practice": 1.51,
+   "4-community-labels": 0.89,
+   "4-knowledge": 0.01,
+   "5-G-practice": 0.86,
+   "5-holdout": 3.55,
+   "5-holdout-labels": 5.38,
+   "round one": 19.38
+  },
+  73.12
+ ],
+ "check_problems": []
+}

@@ -1,0 +1,8 @@
+{
+ "batch": "labels1-a",
+ "model": "claude-opus-5-5",
+ "effort": "high",
+ "n": 140,
+ "system_sha256": "91c80288683581b321927ec58e2057703020b51e88ac348c0a2054f5ef4d1248",
+ "items_sha256": "6c8a7baee00e6223b40355fe4e31c4bbc09f28776040df5dfb3230d34c56cbf3"
+}

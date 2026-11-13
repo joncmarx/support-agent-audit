@@ -1,0 +1,471 @@
+<title>Support Agent Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a support QA review desk. Verdict first, then the review queue: pick a ticket, read three replies side by side. */
+:root {
+  --bg: #f3f4f6;
+  --surface: #fcfcfb;
+  --surface-2: #eceef2;
+  --ink: #161a22;
+  --ink-2: #4a5160;
+  --ink-3: #737a89;
+  --line: #d9dde4;
+  --accent: #23408e;
+  --accent-soft: #e3e8f6;
+  --o-answered: #1baf7a;
+  --o-handoff: #2a78d6;
+  --o-miss: #eda100;
+  --o-wrong: #d8365c;
+  --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317; --surface: #1a1b1d; --surface-2: #23262b; --ink: #eceef2; --ink-2: #b4bac6; --ink-3: #8a91a0;
+    --line: #2f333b; --accent: #9db2f2; --accent-soft: #232b44;
+    --o-answered: #1f9e70; --o-handoff: #3987e5; --o-miss: #c98500; --o-wrong: #e0527d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111317; --surface: #1a1b1d; --surface-2: #23262b; --ink: #eceef2; --ink-2: #b4bac6; --ink-3: #8a91a0;
+  --line: #2f333b; --accent: #9db2f2; --accent-soft: #232b44;
+  --o-answered: #1f9e70; --o-handoff: #3987e5; --o-miss: #c98500; --o-wrong: #e0527d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.55 var(--font-body); margin: 0; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: grid; gap: 56px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 4.6vw, 3.25rem); line-height: 1.05; font-weight: 700; max-width: 18ch; }
+h2 { font-size: 1.6rem; line-height: 1.15; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+p { margin: 0; }
+.eyebrow { font: 500 0.75rem/1.2 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.lede { font-size: 1.125rem; color: var(--ink-2); max-width: 62ch; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); }
+.section-head { display: grid; gap: 8px; max-width: 70ch; }
+.section-head p { color: var(--ink-2); }
+
+/* header */
+header.hero { display: grid; gap: 18px; }
+.byline { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.9rem; color: var(--ink-3); }
+
+/* scorecards */
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1040px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.card.final { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.vtag { font: 500 0.8rem var(--font-mono); color: var(--ink-3); }
+.card .how { color: var(--ink-2); font-size: 0.95rem; flex: 1; }
+.big { display: grid; gap: 2px; }
+.big .num { font: 700 3.2rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.big .lbl { font-size: 0.9rem; color: var(--ink-2); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; }
+.stat .v { font: 600 1.25rem var(--font-display); font-variant-numeric: tabular-nums; }
+.stat .k { font-size: 0.8rem; color: var(--ink-3); }
+
+/* chart */
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 16px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.875rem; color: var(--ink-2); }
+.key { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.bars { display: grid; gap: 14px; }
+.barrow { display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 12px; align-items: center; }
+.barrow .name { font-size: 0.9rem; font-weight: 500; }
+.barrow .name span { display: block; font: 400 0.75rem var(--font-mono); color: var(--ink-3); }
+.bar { display: flex; gap: 2px; height: 34px; min-width: 0; }
+.seg { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; font: 600 0.8rem var(--font-mono); color: #fff; min-width: 3px; cursor: default; }
+.seg:first-child { border-radius: 4px 0 0 4px; }
+.seg:last-child { border-radius: 0 4px 4px 0; }
+.seg:only-child { border-radius: 4px; }
+.seg.dark-text { color: #1a1300; }
+.axis { display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 12px; }
+.axis .ticks { display: flex; justify-content: space-between; font: 400 0.75rem var(--font-mono); color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 6px; }
+.tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--bg); font-size: 0.8rem; line-height: 1.4; padding: 8px 10px; border-radius: 6px; max-width: 260px; }
+details.numbers summary { cursor: pointer; font-size: 0.875rem; color: var(--accent); }
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; margin-top: 10px; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td.n, th.n { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.callouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
+@media (max-width: 700px) { .callouts { grid-template-columns: 1fr; } }
+.callout { border-left: 3px solid var(--line); padding: 4px 0 4px 14px; color: var(--ink-2); }
+.callout strong { color: var(--ink); font-family: var(--font-display); font-size: 1.15rem; display: block; }
+
+/* steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.steps li { display: grid; grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.steps .ix { font: 600 0.85rem var(--font-mono); color: var(--ink-3); padding-top: 2px; }
+.steps h3 { margin-bottom: 2px; }
+.steps .res { font-size: 0.95rem; color: var(--ink-2); }
+
+/* explorer */
+.explorer { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); min-width: 0; }
+.filters { display: grid; gap: 8px; padding: 14px; border-bottom: 1px solid var(--line); }
+.filters .row { display: flex; gap: 8px; }
+select, input[type="search"], textarea { font: inherit; font-size: 0.9rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; width: 100%; min-width: 0; }
+.count { font-size: 0.8rem; color: var(--ink-3); }
+.list { max-height: 640px; overflow-y: auto; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; padding: 11px 14px; border-bottom: 1px solid var(--line); cursor: pointer; background: none; border-left: 0; border-right: 0; border-top: 0; text-align: left; width: 100%; color: inherit; font: inherit; }
+.item:hover { background: var(--surface-2); }
+.item[aria-selected="true"] { background: var(--accent-soft); }
+.item .t { font-size: 0.9rem; line-height: 1.35; grid-column: 1 / -1; }
+.item .id { font: 400 0.75rem var(--font-mono); color: var(--ink-3); }
+.dots { display: inline-flex; gap: 4px; align-items: center; }
+.dot { width: 10px; height: 10px; border-radius: 2px; }
+.detail { padding: 20px; display: grid; gap: 18px; }
+.dhead { display: grid; gap: 8px; }
+.dhead h3 { font-size: 1.3rem; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.85rem; color: var(--ink-3); align-items: center; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--ink-2); background: var(--bg); }
+.fix { background: var(--surface-2); border-radius: 8px; padding: 12px 14px; font-size: 0.95rem; }
+.fix .eyebrow { display: block; margin-bottom: 4px; }
+.replies { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1000px) { .replies { grid-template-columns: 1fr; } }
+.reply { border: 1px solid var(--line); border-radius: 8px; display: grid; grid-template-rows: auto auto 1fr; min-width: 0; background: var(--bg); }
+.reply.final { border-color: var(--accent); }
+.rhead { padding: 10px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+.rhead .vn { font-size: 0.85rem; font-weight: 600; }
+.chip { display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 500; }
+.note { padding: 10px 12px; font-size: 0.82rem; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+.note b { color: var(--ink); font-weight: 600; }
+.rtext { padding: 12px; font-size: 0.88rem; line-height: 1.55; max-height: 420px; overflow-y: auto; overflow-wrap: anywhere; min-width: 0; }
+.rtext p + p, .rtext ul, .rtext ol, .rtext pre { margin-top: 8px; }
+.rtext ul, .rtext ol { padding-left: 20px; margin-bottom: 0; }
+.rtext code { font-family: var(--font-mono); font-size: 0.82em; background: var(--surface-2); padding: 1px 4px; border-radius: 4px; }
+.rtext pre { background: var(--surface-2); padding: 8px; border-radius: 6px; overflow-x: auto; font-size: 0.8rem; }
+.rtext pre code { background: none; padding: 0; }
+.stamp { margin: 10px 12px 0; border: 1.5px dashed var(--accent); color: var(--accent); border-radius: 6px; padding: 8px 10px; font-size: 0.8rem; display: grid; gap: 4px; }
+.stamp b { font: 600 0.72rem var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: 0.8rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; justify-self: start; }
+.draft { margin: 8px 12px 0; border-left: 2px solid var(--line); padding-left: 10px; font-size: 0.82rem; color: var(--ink-2); max-height: 260px; overflow-y: auto; overflow-wrap: anywhere; }
+
+/* live */
+.live { background: var(--surface); border: 1px solid var(--accent); border-radius: var(--r); padding: 20px; display: grid; gap: 12px; }
+.live textarea { min-height: 120px; resize: vertical; }
+.live input[type="text"] { font: inherit; font-size: 0.9rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; width: 100%; }
+button.primary { font: 600 0.95rem var(--font-body); background: var(--accent); color: var(--bg); border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer; justify-self: start; }
+button.primary[disabled] { opacity: 0.6; cursor: wait; }
+.steps-live { display: grid; gap: 10px; }
+.steps-live .box { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--bg); }
+
+/* method */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px 28px; }
+.fact .k { font: 500 0.72rem var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.fact p { font-size: 0.95rem; color: var(--ink-2); margin-top: 4px; }
+.limits { display: grid; gap: 8px; max-width: 75ch; color: var(--ink-2); font-size: 0.95rem; padding-left: 18px; margin: 0; }
+footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: 0.875rem; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+
+@media (max-width: 820px) {
+  .explorer { grid-template-columns: 1fr; }
+  .list { max-height: 360px; }
+  .steps li { grid-template-columns: 40px minmax(0, 1fr); }
+  .steps li > div:last-child { grid-column: 2; }
+  .barrow, .axis { grid-template-columns: 1fr; gap: 6px; }
+  .axis .spacer { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .seg { transition: filter 120ms ease; }
+  .seg:hover, .seg:focus-visible { filter: brightness(1.08); }
+}
+</style>
+<!--BODY-->
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Support agent audit · n8n community forum · September 2026</p>
+    <h1>How often is your AI support agent confidently wrong?</h1>
+    <p class="lede">I gave a support bot 97 real questions from the n8n community forum. Each one already had an accepted answer written by another member, so every reply is graded against a fix that actually worked. The bot, the model and the docs stayed the same. Only its instructions changed.</p>
+    <div class="byline"><span>Jonathan Marx</span><span>Customer Success × AI automation</span><span id="spend-line"></span></div>
+  </header>
+
+  <section aria-labelledby="verdict" style="display:grid;gap:20px">
+    <div class="section-head">
+      <p class="eyebrow">The verdict</p>
+      <h2 id="verdict">Four versions of the same bot</h2>
+    </div>
+    <div class="cards" id="cards"></div>
+    <div class="chart" id="chart">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline">
+        <h3>Where the 97 questions went</h3>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="bars" id="bars"></div>
+      <div class="axis"><span class="spacer"></span><div class="ticks mono"><span>0</span><span>25</span><span>50</span><span>75</span><span>97</span></div></div>
+      <details class="numbers"><summary>Show the numbers</summary><div class="tbl-wrap"><table id="numbers"></table></div></details>
+    </div>
+    <div class="callouts" id="callouts"></div>
+  </section>
+
+  <section aria-labelledby="changes" style="display:grid;gap:20px">
+    <div class="section-head">
+      <p class="eyebrow">What changed, in order</p>
+      <h2 id="changes">Each version fixed one failure and exposed the next</h2>
+      <p>Versions 2 to 4 were written after studying the 43 practice questions only. The 97 test questions were held back and scored once, at the end.</p>
+    </div>
+    <ol class="steps" id="steps"></ol>
+  </section>
+
+  <section class="live" id="live" hidden aria-labelledby="live-h">
+    <div class="section-head">
+      <p class="eyebrow">Live on this computer</p>
+      <h2 id="live-h">Ask the final version a question</h2>
+      <p>This runs the draft, the reviewer and the handoff step live. It uses a local key and never runs on the public page.</p>
+    </div>
+    <form id="ask-form" style="display:grid;gap:10px">
+      <label for="ask-title" class="eyebrow">Title</label>
+      <input type="text" id="ask-title" placeholder="Webhook returns 404 after publishing">
+      <label for="ask-q" class="eyebrow">Question</label>
+      <textarea id="ask-q" placeholder="Describe the problem the way a customer would, with the n8n version and setup."></textarea>
+      <button class="primary" id="ask-go" type="submit">Ask</button>
+    </form>
+    <div class="steps-live" id="ask-out"></div>
+  </section>
+
+  <section aria-labelledby="queue" style="display:grid;gap:20px">
+    <div class="section-head">
+      <p class="eyebrow">The review queue</p>
+      <h2 id="queue">Read every reply and every grade</h2>
+      <p>Pick a question to see what each version said, how the grader scored it and why. The first question shown is one where the bot bluffed and the reviewer caught it.</p>
+    </div>
+    <div class="explorer">
+      <div class="panel">
+        <div class="filters">
+          <label class="eyebrow" for="f-version">Filter by how a version did</label>
+          <div class="row">
+            <select id="f-version" aria-label="Version"><option value="v1">v1 · Default</option><option value="v2">v2 · Commit</option><option value="v3">v3 · Triage</option><option value="v4" selected>v4 · Review</option></select>
+            <select id="f-outcome" aria-label="Outcome"><option value="any">Any outcome</option></select>
+          </div>
+          <input type="search" id="f-search" placeholder="Search titles" aria-label="Search titles">
+          <span class="count" id="f-count"></span>
+        </div>
+        <div class="list" id="list" role="listbox" aria-label="Questions"></div>
+      </div>
+      <div class="panel detail" id="detail" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="method" style="display:grid;gap:20px">
+    <div class="section-head">
+      <p class="eyebrow">Method</p>
+      <h2 id="method">How it was tested</h2>
+    </div>
+    <div class="facts" id="facts"></div>
+    <div class="section-head"><h3>Limits</h3></div>
+    <ul class="limits">
+      <li>An AI model does the grading. It grades against the accepted answer, and its reasoning for every reply is shown above so you can check it.</li>
+      <li>The "needs a human" labels are also set by an AI model, before any bot ran, using a written rule. They decide only whether a handoff counts as correct or unnecessary.</li>
+      <li>Each version ran once on each question. Small differences, such as 1 versus 4 wrong answers, are within run-to-run noise. The large ones are not.</li>
+      <li>Forum questions are harder than a typical support queue: the easy ones get answered by the docs and never reach the forum.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Built by Jonathan Marx</span>
+    <a href="https://github.com/joncmarx/support-agent-audit">Code and data on GitHub</a>
+    <span id="foot-models"></span>
+  </footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+const D = /*__DATA__*/null;
+const V = ["v1", "v2", "v3", "v4"];
+const OUT = {
+  resolved: { label: "Solved", g: "answered" },
+  partial: { label: "Partly solved", g: "answered" },
+  right_question: { label: "Asked the right question", g: "answered" },
+  correct_handoff: { label: "Handed off, correctly", g: "handoff" },
+  unnecessary_handoff: { label: "Handed off, but the docs had the fix", g: "miss" },
+  confidently_wrong: { label: "Confidently wrong", g: "wrong" },
+};
+const GROUPS = [
+  { k: "answered", label: "Answered", color: "var(--o-answered)", dark: false },
+  { k: "handoff", label: "Handed off, correctly", color: "var(--o-handoff)", dark: false },
+  { k: "miss", label: "Handed off, docs had the fix", color: "var(--o-miss)", dark: true },
+  { k: "wrong", label: "Confidently wrong", color: "var(--o-wrong)", dark: false },
+];
+const VINFO = {
+  v1: { short: "Default", how: "Answer from the docs. If they don't cover it, say so and suggest support." },
+  v2: { short: "Commit", how: "Diagnose the problem, read the customer's workflow, give exact steps, stop handing off by reflex." },
+  v3: { short: "Triage", how: "Write a private note first: which doc passage supports this fix? Then answer, ask one question, or hand off." },
+  v4: { short: "Review", how: "Draft with a private triage note, then a separate reviewer check. Anything it can't verify becomes a clean handoff." },
+};
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pct = (a, n) => Math.round((100 * a) / n);
+const groupCount = (s, g) => Object.keys(OUT).filter((k) => OUT[k].g === g).reduce((t, k) => t + (s[k] || 0), 0);
+const colorOf = (outcome) => GROUPS.find((g) => g.k === OUT[outcome].g).color;
+
+function md(text) {
+  const blocks = [];
+  let t = esc(text).replace(/```[a-z]*\n?([\s\S]*?)```/g, (_, c) => { blocks.push(c); return `\u0000${blocks.length - 1}\u0000`; });
+  const inline = (s) => s
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" rel="noopener" target="_blank">$1</a>');
+  const out = [];
+  for (const para of t.split(/\n{2,}/)) {
+    const lines = para.split("\n").filter((l) => l.trim());
+    if (!lines.length) continue;
+    if (/^\u0000\d+\u0000$/.test(lines[0].trim())) { out.push(`<pre><code>${blocks[+lines[0].trim().slice(1, -1)]}</code></pre>`); continue; }
+    if (lines.every((l) => /^\s*([-*]|\d+[.)])\s+/.test(l))) {
+      const ordered = /^\s*\d/.test(lines[0]);
+      out.push(`<${ordered ? "ol" : "ul"}>${lines.map((l) => `<li>${inline(l.replace(/^\s*([-*]|\d+[.)])\s+/, ""))}</li>`).join("")}</${ordered ? "ol" : "ul"}>`);
+      continue;
+    }
+    out.push(`<p>${lines.map((l) => inline(l.replace(/^#{1,4}\s+(.*)$/, "<strong>$1</strong>"))).join("<br>")}</p>`);
+  }
+  return out.join("").replace(/\u0000(\d+)\u0000/g, (_, i) => `<pre><code>${blocks[+i]}</code></pre>`);
+}
+
+function renderTop() {
+  const n = D.meta.test_n;
+  $("#spend-line").textContent = `Total model cost: $${D.meta.spend.toFixed(2)}`;
+  $("#foot-models").textContent = `Bot: ${D.meta.model} · Grader: ${D.meta.judge}`;
+  $("#cards").innerHTML = V.map((v) => {
+    const s = D.test[v];
+    const wrong = s.confidently_wrong, handed = s.correct_handoff + s.unnecessary_handoff, well = s.resolved + s.correct_handoff + s.right_question;
+    return `<article class="card ${v === "v4" ? "final" : ""}">
+      <div class="card-top"><h3>${esc(D.meta.names[v])}</h3><span class="vtag">${v}</span></div>
+      <p class="how">${esc(VINFO[v].how)}</p>
+      <div class="big"><span class="num">${pct(wrong, n)}%</span><span class="lbl">confidently wrong (${wrong} of ${n})</span></div>
+      <div class="stats">
+        <div class="stat"><div class="v">${pct(well, n)}%</div><div class="k">handled well: solved, or handed off when it should</div></div>
+        <div class="stat"><div class="v">${pct(handed, n)}%</div><div class="k">handed to a human (${handed} of ${n})</div></div>
+      </div>
+    </article>`;
+  }).join("");
+  $("#legend").innerHTML = GROUPS.map((g) => `<span class="key"><span class="sw" style="background:${g.color}"></span>${esc(g.label)}</span>`).join("");
+  $("#bars").innerHTML = V.map((v) => {
+    const s = D.test[v];
+    const segs = GROUPS.map((g) => ({ g, c: groupCount(s, g.k) })).filter((x) => x.c > 0);
+    return `<div class="barrow"><div class="name">${esc(D.meta.names[v])}<span>${v}</span></div><div class="bar">${segs.map(({ g, c }) => {
+      const detail = g.k === "answered" ? ` (${s.resolved} solved, ${s.partial} partly)` : "";
+      const tip = `${D.meta.names[v]}: ${c} of ${n} ${g.label.toLowerCase()}${detail}`;
+      return `<div class="seg ${g.dark ? "dark-text" : ""}" tabindex="0" role="img" aria-label="${esc(tip)}" data-tip="${esc(tip)}" style="flex:${c} 1 0;background:${g.color}">${c >= 5 ? c : ""}</div>`;
+    }).join("")}</div></div>`;
+  }).join("");
+  const rows = Object.keys(OUT);
+  $("#numbers").innerHTML = `<thead><tr><th>Outcome</th>${V.map((v) => `<th class="n">${v}</th>`).join("")}</tr></thead><tbody>${rows.map((k) => `<tr><td>${esc(OUT[k].label)}</td>${V.map((v) => `<td class="n">${D.test[v][k]}</td>`).join("")}</tr>`).join("")}<tr><td><strong>Questions</strong></td>${V.map((v) => `<td class="n">${D.test[v].n}</td>`).join("")}</tr></tbody>`;
+  const hl = D.meta.test_labels.handoff || 0, docs = D.meta.test_labels.docs || 0;
+  $("#callouts").innerHTML = `
+    <div class="callout"><strong>${pct(hl, n)}% of the questions had a fix that isn't in the docs</strong>A docs-grounded bot can't solve most real forum questions. Knowing when to hand off is most of the job.</div>
+    <div class="callout"><strong>Telling it to commit made it bluff</strong>Confident wrong answers went from ${D.test.v1.confidently_wrong} to ${D.test.v2.confidently_wrong} when the bot was pushed to always give a fix.</div>
+    <div class="callout"><strong>The version that solved the most also bluffed</strong>Triage first solved ${D.test.v3.resolved} and asked the right question ${D.test.v3.right_question} times, more than any other version. It was also confidently wrong ${D.test.v3.confidently_wrong} times.</div>
+    <div class="callout"><strong>Safety has a price</strong>The reviewer cut wrong answers to ${D.test.v4.confidently_wrong}, but it also handed off ${D.test.v4.unnecessary_handoff} of the ${docs} questions the docs could answer.</div>`;
+  const dv = D.dev;
+  const devLine = (v) => `Practice set: ${dv[v].confidently_wrong} of ${dv[v].n} confidently wrong, ${dv[v].correct_handoff + dv[v].unnecessary_handoff} handed off.`;
+  const steps = [
+    ["v1", "Default settings", "The instructions most docs bots ship with. It gave up on answerable questions and still bluffed sometimes.", devLine("v1")],
+    ["v2", "Told to commit", "Diagnose first, read the customer's workflow, give exact steps, no reflex handoffs. It stopped giving up and started guessing.", devLine("v2")],
+    ["v3", "Triage first", "A private note first: which doc passage supports this fix? It solved the most questions, but the bot always found a passage that looked relevant, so it still bluffed.", devLine("v3")],
+    ["v4", "Draft, then review", "A separate reviewer checks the draft against the customer's actual symptom and the docs. Drafts it can't verify become a handoff with a summary for the human.", devLine("v4")],
+  ];
+  $("#steps").innerHTML = steps.map(([v, h, what, res]) => `<li><span class="ix">${v}</span><div><h3>${esc(h)}</h3><p class="muted" style="font-size:.9rem">${v === "v3" ? "Test replies are v4's first drafts" : "Scored on the test set"}</p></div><div><p>${esc(what)}</p><p class="res mono" style="margin-top:6px;font-size:.8rem">${esc(res)}</p></div></li>`).join("");
+  $("#facts").innerHTML = [
+    ["Questions", `${D.meta.collected} solved threads from 2026, each with an accepted answer written by someone other than the asker. ${D.meta.unusable} were dropped because the accepted answer held no usable fix, leaving ${D.meta.dev_n} practice and ${D.meta.test_n} test questions.`],
+    ["Docs", `n8n's public documentation, frozen at one version (<a href="${esc(D.meta.docs_commit)}">commit ${esc(D.meta.docs_commit.split("/").pop().slice(0, 7))}</a>) and split into 3,755 searchable passages.`],
+    ["Bot", `${esc(D.meta.model)}, a low-cost model of the kind real support bots run on. Same model and settings for every version.`],
+    ["Grader", `${esc(D.meta.judge)}, from a different company than the bot. It reads the question, the accepted answer, the passages the bot saw and the reply, then picks one outcome.`],
+    ["Versions", "v4 runs v3 and then its reviewer, so v3's test replies are v4's first drafts, graded before the reviewer saw them. Versions 2 to 4 were written from the practice questions only."],
+    ["Rubric", "Outcomes plus the Confidence Equation from The Modern CSM: competence, reliability and empathy, divided by uncertainty."],
+    ["Cost", `$${D.meta.spend.toFixed(2)} in model calls for everything on this page, including the practice runs.`],
+  ].map(([k, v]) => `<div class="fact"><div class="k">${k}</div><p>${v}</p></div>`).join("");
+}
+
+function tooltip() {
+  const tip = $("#tip");
+  const show = (el, x, y) => { tip.textContent = el.dataset.tip; tip.hidden = false; tip.style.left = Math.min(x + 12, innerWidth - 280) + "px"; tip.style.top = y + 14 + "px"; };
+  document.addEventListener("mousemove", (e) => { const el = e.target.closest("[data-tip]"); if (el) show(el, e.clientX, e.clientY); else tip.hidden = true; });
+  document.addEventListener("focusin", (e) => { const el = e.target.closest("[data-tip]"); if (el) { const r = el.getBoundingClientRect(); show(el, r.left, r.bottom); } });
+  document.addEventListener("focusout", () => { tip.hidden = true; });
+}
+
+let selected = null;
+function filtered() {
+  const v = $("#f-version").value, o = $("#f-outcome").value, s = $("#f-search").value.trim().toLowerCase();
+  return D.items.filter((it) => (o === "any" || it.replies[v].outcome === o) && (!s || it.title.toLowerCase().includes(s)));
+}
+function renderList() {
+  const items = filtered();
+  $("#f-count").textContent = `${items.length} of ${D.items.length} questions`;
+  $("#list").innerHTML = items.map((it) => `<button class="item" role="option" aria-selected="${it.id === selected}" data-id="${it.id}">
+    <span class="t">${esc(it.title)}</span>
+    <span class="id">#${it.id}</span>
+    <span class="dots">${V.map((v) => `<span class="dot" title="${v}: ${esc(OUT[it.replies[v].outcome].label)}" style="background:${colorOf(it.replies[v].outcome)}"></span>`).join("")}</span>
+  </button>`).join("") || `<p style="padding:14px" class="muted">No questions match. Clear the search or pick another outcome.</p>`;
+}
+function reasonText(it) {
+  if (it.label === "docs") return "Docs have the fix";
+  return { not_in_docs: "Needs a human: fix isn't in the docs", bug_release: "Needs a human: a bug or release issue", access: "Needs a human: account or staff access" }[it.reason] || "Needs a human";
+}
+function renderDetail(id) {
+  selected = id;
+  const it = D.items.find((x) => x.id === id);
+  document.querySelectorAll(".item").forEach((b) => b.setAttribute("aria-selected", String(+b.dataset.id === id)));
+  $("#detail").innerHTML = `
+    <div class="dhead">
+      <h3>${esc(it.title)}</h3>
+      <div class="meta"><span class="mono">#${it.id}</span><span>${esc(it.date)}</span><span class="pill">${esc(reasonText(it))}</span><a href="${esc(it.url)}" target="_blank" rel="noopener">Open the forum thread</a></div>
+    </div>
+    <div class="fix"><span class="eyebrow">What actually fixed it (summary of the accepted answer)</span>${esc(it.fix)}</div>
+    <div class="replies">${V.map((v) => {
+      const r = it.replies[v];
+      const stamp = v === "v4" && r.blocked ? `<div class="stamp"><b>Reviewer blocked the first draft</b><span>${esc(r.review)}</span><button class="linkbtn" data-toggle="draft-${it.id}">Show the blocked draft</button></div><div class="draft rtext" id="draft-${it.id}" hidden>${md(r.draft)}</div>` : "";
+      return `<article class="reply ${v === "v4" ? "final" : ""}">
+        <div class="rhead"><span class="vn">${v} · ${esc(D.meta.names[v])}</span><span class="chip"><span class="sw" style="background:${colorOf(r.outcome)}"></span>${esc(OUT[r.outcome].label)}</span></div>
+        <div class="note"><b>Grader:</b> ${esc(r.note)}</div>
+        <div>${stamp}<div class="rtext">${md(r.text)}</div></div>
+      </article>`;
+    }).join("")}</div>`;
+}
+function initExplorer() {
+  const sel = $("#f-outcome");
+  Object.keys(OUT).forEach((k) => { const o = document.createElement("option"); o.value = k; o.textContent = OUT[k].label; sel.appendChild(o); });
+  ["#f-version", "#f-outcome", "#f-search"].forEach((s) => $(s).addEventListener("input", renderList));
+  $("#list").addEventListener("click", (e) => { const b = e.target.closest(".item"); if (b) { renderDetail(+b.dataset.id); if (innerWidth < 820) $("#detail").scrollIntoView({ block: "start", behavior: "smooth" }); } });
+  $("#detail").addEventListener("click", (e) => { const b = e.target.closest("[data-toggle]"); if (!b) return; const d = document.getElementById(b.dataset.toggle); d.hidden = !d.hidden; b.textContent = d.hidden ? "Show the blocked draft" : "Hide the blocked draft"; });
+  const pick = D.items.find((it) => it.replies.v2.outcome === "confidently_wrong" && it.replies.v1.outcome === "confidently_wrong" && it.replies.v4.blocked && it.replies.v4.outcome === "correct_handoff")
+    || D.items.find((it) => it.replies.v2.outcome === "confidently_wrong" && it.replies.v4.blocked) || D.items[0];
+  selected = pick.id;
+  renderList();
+  renderDetail(pick.id);
+}
+
+async function initLive() {
+  if (!["localhost", "127.0.0.1"].includes(location.hostname)) return;
+  try { const r = await fetch("/api/health"); if (!r.ok) return; } catch { return; }
+  $("#live").hidden = false;
+  $("#ask-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = $("#ask-q").value.trim(); if (!q) { $("#ask-q").focus(); return; }
+    const btn = $("#ask-go"); btn.disabled = true; btn.textContent = "Working: draft, review, reply";
+    $("#ask-out").innerHTML = "";
+    try {
+      const r = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: $("#ask-title").value.trim() || q.slice(0, 80), question: q }) });
+      const a = await r.json();
+      if (!r.ok) throw new Error(a.error || "The request failed.");
+      $("#ask-out").innerHTML = `
+        <div class="box"><span class="eyebrow">1 · Private triage note</span><div class="rtext">${md(a.triage || "(none)")}</div></div>
+        <div class="box"><span class="eyebrow">2 · Reviewer</span><p>${a.review_safe ? "Draft passed review and was sent as written." : "Blocked: " + esc(a.review_problem)}</p>${a.review_safe ? "" : `<details><summary class="linkbtn">Show the blocked draft</summary><div class="rtext">${md(a.draft)}</div></details>`}</div>
+        <div class="box" style="border-color:var(--accent)"><span class="eyebrow">3 · Reply the customer gets</span><div class="rtext">${md(a.answer)}</div></div>`;
+    } catch (err) {
+      $("#ask-out").innerHTML = `<div class="box">Couldn't get a reply: ${esc(err.message)} Check that the local server is still running, then try again.</div>`;
+    } finally { btn.disabled = false; btn.textContent = "Ask"; }
+  });
+}
+
+renderTop(); tooltip(); initExplorer(); initLive();
+</script>

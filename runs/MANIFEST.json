@@ -1,0 +1,268 @@
+{
+ "sha256": "9191d6b939f1fa1e21af5a63bc733723023d7686354b8eb9c4b2741bc6bfdb46",
+ "written": "2026-10-28T16:33:32+0000",
+ "plan": {
+  "file": "TEST-PLAN-v3.md",
+  "sha256": "d7dd09bfdabc262b90fd808607da56a0fb5b42de614df270e768073b2b006d0b"
+ },
+ "models": {
+  "openai/gpt-5.4-mini": {
+   "company": "openai",
+   "provider": "openai",
+   "reasoning": {
+    "effort": "none"
+   },
+   "price": [
+    0.75,
+    4.5
+   ]
+  },
+  "openai/gpt-6.1-sol": {
+   "company": "openai",
+   "provider": "openai",
+   "reasoning": null,
+   "price": [
+    2.0,
+    10.0
+   ]
+  },
+  "anthropic/claude-sonnet-5.5": {
+   "company": "anthropic",
+   "provider": "anthropic",
+   "reasoning": {
+    "effort": "high"
+   },
+   "price": [
+    2.0,
+    10.0
+   ]
+  },
+  "anthropic/claude-opus-5.5": {
+   "company": "anthropic",
+   "provider": "anthropic",
+   "reasoning": {
+    "effort": "high"
+   },
+   "price": [
+    4.0,
+    20.0
+   ]
+  },
+  "google/gemini-3.8-flash": {
+   "company": "google",
+   "provider": "google-ai-studio",
+   "reasoning": null,
+   "price": [
+    0.75,
+    3.75
+   ]
+  },
+  "meta/muse-spark-1.3": {
+   "company": "meta",
+   "provider": "meta",
+   "reasoning": null,
+   "price": [
+    1.25,
+    4.25
+   ]
+  },
+  "qwen/qwen3.8-max-0902": {
+   "company": "alibaba",
+   "provider": "alibaba",
+   "reasoning": {
+    "effort": "medium"
+   },
+   "price": [
+    2.0,
+    6.0
+   ]
+  },
+  "z-ai/glm-5.3": {
+   "company": "zhipu",
+   "provider": "parasail/fp8",
+   "reasoning": null,
+   "price": [
+    1.4,
+    4.4
+   ]
+  },
+  "xiaomi/mimo-v2.6-pro": {
+   "company": "xiaomi",
+   "provider": "xiaomi/fp8",
+   "reasoning": null,
+   "price": [
+    0.435,
+    0.87
+   ]
+  },
+  "moonshotai/kimi-k3": {
+   "company": "moonshot",
+   "provider": "moonshotai/mxfp4",
+   "reasoning": null,
+   "price": [
+    3.0,
+    15.0
+   ]
+  },
+  "baai/bge-m3": {
+   "company": "baai",
+   "provider": "deepinfra/fp32",
+   "reasoning": null,
+   "price": [
+    0.01,
+    0.0
+   ]
+  }
+ },
+ "roles": {
+  "grader1": "anthropic/claude-sonnet-5.5",
+  "grader1_route": "api (batch mode where available; decision 13)",
+  "grader2_candidates": [
+   "google/gemini-3.8-flash",
+   "meta/muse-spark-1.3",
+   "qwen/qwen3.8-max-0902"
+  ],
+  "grader2": "google/gemini-3.8-flash",
+  "tiebreaker": "meta/muse-spark-1.3",
+  "labeler1": "anthropic/claude-sonnet-5.5",
+  "labeler2": "google/gemini-3.8-flash",
+  "drafter_low": "openai/gpt-5.4-mini",
+  "reviewer_A": "openai/gpt-5.4-mini",
+  "embed": "baai/bge-m3"
+ },
+ "caps": {
+  "default_thinking_models": 8000,
+  "timeout_seconds": 180,
+  "overrides": {
+   "drafter|openai/gpt-5.4-mini": 2000,
+   "reviewer_A|openai/gpt-5.4-mini": 400,
+   "handoff|openai/gpt-5.4-mini": 500,
+   "reviewer_B|z-ai/glm-5.3": 24000,
+   "reviewer_B|moonshotai/kimi-k3": 24000,
+   "reviewer_B|xiaomi/mimo-v2.6-pro": 24000,
+   "reviewer_I|xiaomi/mimo-v2.6-pro": 24000
+  },
+  "rule": "sized from the practice trials to at least 4x the longest reply, then frozen"
+ },
+ "attempts": 3,
+ "batch_hosts": {
+  "anthropic/claude-sonnet-5.5": "anthropic",
+  "google/gemini-3.8-flash": "google-vertex/global",
+  "openai/gpt-5.4-mini": "openai",
+  "openai/gpt-6.1-sol": "openai"
+ },
+ "sampling": {
+  "temperature": "not sent (provider default)",
+  "seed": "not sent",
+  "host_fallbacks": false,
+  "note": "OpenAI models on OpenRouter take no temperature and Anthropic's take no seed, so reruns can't be forced identical"
+ },
+ "prompts": {
+  "rubric/RUBRIC-v3.md": "4f913aea4180f361ab5257b1c8c68ddfcaa1340040ee7849b08ee5e239f389fb",
+  "rubric/RUBRIC.md": "d89f0704cc70a36a9eaf67606c016aa850b94944959baf68c8f18a146d566250",
+  "rubric/LABELING.md": "76fc775cf77e95ad4fde9c69e0455c16928dbf6c226c796e922a947d70665012",
+  "rubric/LABELING-v2.md": "91c80288683581b321927ec58e2057703020b51e88ac348c0a2054f5ef4d1248",
+  "prompts/F0F_SYSTEM.md": "b414904f44835c09e130ddd1d257ee50b9ed8509acb3f6f97bfff06976f62d5d",
+  "prompts/F0F_USER.md": "8d6cc9a2877176436f402379c378024315757d7fa5cb84802de0d82702f2bf9f",
+  "prompts/F_REVIEW.md": "097ab62bd7d0495c8473cd14ebc8210d26241906502f7b5512148e0a561b4870",
+  "prompts/G_HANDOFF.md": "7e756aa3bd900934b79e800cb98d06a6f6db31b4a917649962c870c61ccc791c",
+  "prompts/SAFE_HANDOFF.txt": "cc843058fc9f75ae9eb32c453151bad25c081ea03f9b992c92e1da1a7ee13825"
+ },
+ "bot_prompts_sha256": {
+  "v1": "bcdf44463e3884ddc7a22bd0fbf0a19b9f013fc680a9303719b82d07fff6870d",
+  "v2": "0d4d4d89c73ef2d4890aef28c649e21d299ad9ce1a69c9f5be137a64d2482d88",
+  "v3": "33f3e544c5bf975131cdba9e77e6b35a222a73da038114d49b7fdc43d168de2b",
+  "v4": "33f3e544c5bf975131cdba9e77e6b35a222a73da038114d49b7fdc43d168de2b",
+  "review": "ef90c4c470ca47c04ce4d80a4bb3931c9311c84c61f7f64bd9662a36c971d169",
+  "handoff": "d5136af83ef2db471f5a23ac4f73c8d199a6376bf9b49592a30209ef21a72b65"
+ },
+ "outcome_table_sha256": "554d320e37b9c724ff10484e7733f840cf634b4cf2d9b83e8b8f755fef423c57",
+ "normalizer_sha256": "8351b8f41adcc76b39443584353de3e13e4a6947c1a8ddb3711325dce2e393d5",
+ "output_formats": {
+  "grade": "rubric/RUBRIC-v3.md section Output; parsed strictly by audit/grade3.py:parse_grade"
+ },
+ "retrieval": {
+  "docs_commit": "https://github.com/n8n-io/n8n-docs/tree/bb69dd52c760b83e1fdb28c7fd89230fcb890c38",
+  "index": {
+   "docs_chunks.jsonl": "fd0f7076307e1d55416aaa0ac6fa948642bd5dad7cdf039d2db0c387e8169a75",
+   "docs_vectors.npy": "5f73149d5d4222cf700c707d44eae28e8b3254017cbcc0b893fdfc0442976b28"
+  },
+  "mode": "hybrid (BM25 + bge-m3, reciprocal-rank fusion, pool 30)",
+  "passages": 8,
+  "query": "title + question text + node types (v4 settings)",
+  "practice_and_test": "arms B, D, F0, F reuse the passages round one retrieved",
+  "community": {
+   "top": 3,
+   "cap_tokens": 1500,
+   "section": "separate, labeled peer-written"
+  }
+ },
+ "harvest_snapshot_sha256": null,
+ "question_sets": {
+  "practice": {
+   "n": 43,
+   "ids_sha256": "4b41f104c2d15f7dc9579058133c3ba5d12d5165fb41621a8b789f310aff1abd",
+   "text_sha256": "0dd0bb54a4aecd49d12c8fd556935d94793729e4a99e31b9cf458ae03cf9161d"
+  },
+  "test": {
+   "n": 97,
+   "ids_sha256": "4df9394272df791a344f93c62cdfc8eb061efbe9f3fd2f99a6b0dacfa25c0bb8",
+   "text_sha256": "2a956b9f4f10ad0b31501f88b4363f2c70632e8558fb90f2ff745e4427f14da8"
+  },
+  "holdout": {
+   "sealed_at": "2026-09-30T20:39:08+0000",
+   "n": 100,
+   "reserve": 20,
+   "files": {
+    "holdout_questions.jsonl": "f0f6533013a0aa91983cdcd696f5765072cf92f1ac3100185a309a12e48332eb",
+    "holdout_solutions.jsonl": "fe33068ee80021e17cb2484a41910c62023686163cf1a93f726bd7f338f5d002",
+    "reserve_questions.jsonl": "255bf6df9c77c85ea100936c2d93688f01c655f4f91b6ff71332f9dd61742253",
+    "reserve_solutions.jsonl": "40e465d5c2b25fae5e920606e210065fee4a17bf1e9009faade5826e4b9cfde4"
+   },
+   "draw_log_sha256": "c08fb9430c63ebf20b6c40415e2f4153c3819181c9a69a7ba5b462722fbdc9dc",
+   "rules_sha256": "e168e418df135dd3db358c2986b00115fda7e0dd9e6116ad8f21f87fb31a276f",
+   "summary": {
+    "checked": 193,
+    "decisions": {
+     "pick": 120,
+     "skip": 66,
+     "exclude": 7
+    },
+    "reasons": {
+     "self_answered": 33,
+     "L_round_one": 4,
+     "date": 12,
+     "original_not_english": 1,
+     "image_dependent": 8,
+     "question_short": 3,
+     "spanish": 2,
+     "answer_short": 8,
+     "C_round_one": 2
+    },
+    "flagged_originals": 11,
+    "edited_in_holdout": 24
+   }
+  }
+ },
+ "seeds": {
+  "holdout_order": 20260929,
+  "resampling": 20260930,
+  "calibration_samples": 20260930
+ },
+ "trust_gate": {
+  "practice_screen": "at most 1 confidently wrong of 43 (looser than 2%, stated)",
+  "holdout_gate": "at most 2 confidently wrong of exactly 100",
+  "unresolved": "counted as trust incidents under the conservative rule (section 7)"
+ },
+ "budget": {
+  "key_limit_usd": 80,
+  "headroom_multiplier": 1.3,
+  "phase_overrun_stop": 1.3
+ },
+ "code": {
+  "git_commit": null,
+  "note": "no git repo yet; tree hash covers audit/*.py, tests/*.py, runs/ledger.py",
+  "tree_sha256": "c2b2fc64ef8dfe6734fb4a8ba898cfe836761ca6b3e378b4e3a6c40406c790e4",
+  "files": 49
+ }
+}

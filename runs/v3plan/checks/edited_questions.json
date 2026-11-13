@@ -1,0 +1,46 @@
+{
+ "tag_only_no_text_change": [
+  278206,
+  302640,
+  303217,
+  303966,
+  305439,
+  305574,
+  306510,
+  306545,
+  306956,
+  307158,
+  307649,
+  308543,
+  308724,
+  309050,
+  309257,
+  309298,
+  310104,
+  310338,
+  310715,
+  313771
+ ],
+ "text_changed_no_solution": {
+  "266482": "formatting only (details wrapper, image removed)",
+  "302503": "forum machine translation: the original post is German; round one used the English translation",
+  "304343": "asker added a build file's contents (diagnostic, not the fix)",
+  "309749": "asker added debug output and redacted an ID (diagnostic, not the fix)"
+ },
+ "history_hidden_unverifiable": [
+  251367,
+  254693,
+  255850,
+  258058,
+  263598,
+  264040,
+  270419,
+  274129,
+  287340,
+  293980
+ ],
+ "possible_hint_flagged": {
+  "287340": "history hidden; the post's 'expected behavior' section (skip the attribute) sits close to the key fix; can't tell whether it was added later"
+ },
+ "confirmed_solution_leaks": []
+}

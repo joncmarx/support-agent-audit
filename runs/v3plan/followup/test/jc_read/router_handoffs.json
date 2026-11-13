@@ -1,0 +1,14 @@
+{
+ "read_by": "JC",
+ "date": "2026-10-28",
+ "what": "JC's support-lead read of the 6 router handoffs (config R, test) graded confidently wrong. JC knew all 6 were flagged; the graders' reasoning was not shown. Categories: A fine to send, B wrong route low cost, C trust incident, D can't judge.",
+ "ratings": {
+  "299876": {"choice": "C", "note": "Standard n8n execution logic, not a bug. Telling a customer to go through the friction of filing a GitHub issue for a basic workflow design error makes the bot look completely ignorant of how the product actually works."},
+  "275504": {"choice": "C", "note": "Straightforward API versioning mistake (typeVersion: 2). Directing the user to file a bug report for an outdated payload wastes both their time and the maintainers' time, eroding trust in the bot's technical competence."},
+  "274522": {"choice": "C", "note": "High stakes (potential data loss or lockout). Routing them to file a bug report for a standard Docker Compose string-escaping issue ($) is entirely the wrong path and delays a critical, stressful fix. Should have been solved as general technical know-how or escalated directly to a support person."},
+  "295902": {"choice": "C", "note": "Textbook general technical know-how: parsing text into a date object in JavaScript. Deflecting a basic data-type mismatch to a GitHub bug report makes the support channel look completely unreliable for standard troubleshooting."},
+  "281482": {"choice": "B", "note": "There is a community workaround (AI Agent node), but a built-in node failing to parse its own required format is a legitimate product limitation. GitHub isn't ideal because they just needed the workaround, but calling it a potential bug isn't a complete hallucination."},
+  "292551": {"choice": "C", "note": "The user explicitly asked 'Bug or feature?' and the bot incorrectly validated it as a bug. Directing a user to GitHub to report documented, known behavior destroys the bot's credibility as a reliable source of n8n knowledge."}
+ },
+ "summary": {"trust_incident": 5, "wrong_route_low_cost": 1, "fine": 0, "cant_judge": 0}
+}

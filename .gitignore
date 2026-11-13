@@ -1,0 +1,24 @@
+# Private working data: forum posts belong to their authors; docs are fetched, not redistributed
+.cache/
+# Internal planning notes (not part of the public repo)
+PLAN.md
+_internal/
+# Secrets never live here, but just in case
+*.env
+.env*
+__pycache__/
+*.pyc
+.DS_Store
+site/artifact.html
+# Sealed holdout (TEST-PLAN-v3 section 4): kept out of every build and tuning session until v5 is frozen
+sealed/
+# Build 4 (2026-10-21): files that carry forum post text, found by audit/forumscan.py. Forum posts belong to their
+# authors; the public repo keeps ids, titles, links and our own generated text.
+runs/v3plan/batches/
+runs/v3plan/community/*.jsonl
+runs/v3plan/plan/labels1-a/items/
+**/jc_sheet_items.json
+**/jc20_items.json
+**/jc_read/items.json
+# Round one's results page data (superseded by site/data/, built by audit/site3.py)
+site/data.json
