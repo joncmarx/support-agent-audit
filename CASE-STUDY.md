@@ -28,7 +28,7 @@ On the 100 sealed questions, the safest version was confidently wrong 4 times, t
 | Confident wrong answers after swapping the drafting model (test, 97) | 30 → 10 |
 | Flagged replies a support lead would count as trust incidents | 2 of 10 |
 | Graded replies published with their grades | 1,166 |
-| Total model spend | $73 |
+| Total model spend, including $8 of follow-up tests run after the final test | $81 |
 
 ## What broke, and what I changed
 
